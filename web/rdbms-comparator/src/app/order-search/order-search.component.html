@@ -1,0 +1,221 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-8">
+        <p class="card-title">Orders</p>
+        <ng-container *ngIf="!elapsed.loading">
+          <p class="card-subtitle">Retrieval took {{ elapsed.duration }} {{elapsed.elapsedLabel}}</p>
+          <p *ngIf="data" class="card-subtitle">Found {{data.totalElements}}. Showing {{ data.size }} per page.  </p>
+        </ng-container>
+      </div>
+      <div class="align-items-end col-2">
+        <button class="btn btn-outline-dark" type="button" (click)="refresh()">Refresh Data</button>
+      </div>
+      <div class="col-2">
+        <div class="form-check form-switch  form-select-lg px-3">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" (change)="collapse.toggle()" [checked]="isCollapsed">
+          <label class="form-check-label" for="flexSwitchCheckDefault" *ngIf="isCollapsed">Show Search Form</label>
+          <label class="form-check-label" for="flexSwitchCheckDefault" *ngIf="!isCollapsed">Hide Search Form</label>
+        </div>
+      </div>
+    </div>
+    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+      <div class="row py-5">
+        <form [formGroup]="searchForm" (submit)="refresh()">
+          <div class="row py-2">Order Attributes</div>
+          <div class="row g-3 py-2">
+            <div class="col form-group">
+              <label for="orderDate">Order Date</label>
+              <input type="text" class="form-control" aria-label="orderDate" id="orderDate" formControlName="orderDate">
+            </div>
+            <div class="col form-group">
+              <label for="zip">Zip Code</label>
+              <input type="text" class="form-control" id="id" aria-label="warehouseId" formControlName="id">
+            </div>
+            <div class="col form-group">
+              <label for="purchaseOrder">Purchase Order</label>
+              <input type="text" class="form-control" id="purchaseOrder" aria-label="purchaseOrder" formControlName="purchaseOrder">
+            </div>
+            <div class="col form-group">
+              <label for="invoiceDate">Invoice Date</label>
+              <input type="text" class="form-control" id="invoiceDate" aria-label="invoiceDate" formControlName="invoiceDate">
+            </div>
+            <div class="col form-group">
+              <label for="invoiceId">Invoice Id</label>
+              <input type="text" class="form-control" id="invoiceId" aria-label="invoiceId" formControlName="invoiceId">
+            </div>
+          </div>
+          <div class="row g-3 py-2">
+            <div class="col form-group">
+              <label for="fillDate">Fill Date</label>
+              <input type="text" class="form-control" id="fillDate" aria-label="fillDate" formControlName="fillDate">
+            </div>
+            <div class="col form-group">
+              <label for="deliveryMethod">Delivery Method</label>
+              <input type="text" class="form-control" id="deliveryMethod" aria-label="deliveryMethod" formControlName="deliveryMethod">
+            </div>
+            <div class="col form-group">
+              <label for="weight">Weight</label>
+              <input type="text" class="form-control" id="weight" aria-label="weight" formControlName="weight">
+            </div>
+            <div class="col form-group">
+              <label for="totalPieces">Total Items</label>
+              <input type="text" class="form-control" id="totalPieces" aria-label="purchaseOrder" formControlName="totalPieces">
+            </div>
+            <div class="col form-group">
+              <label for="pickDate">Pick Date</label>
+              <input type="text" class="form-control" id="pickDate" aria-label="invoiceId" formControlName="pickDate">
+            </div>
+          </div>
+          <div class="row g-3 py-2">
+            <div class="col form-group">
+              <label for="shippingMethod">Shipping Method</label>
+              <input type="text" class="form-control" id="shippingMethod" aria-label="fillDate" formControlName="shippingMethod">
+            </div>
+            <div class="col form-group">
+              <label for="billingDept">Billing Dept</label>
+              <input type="text" class="form-control" id="billingDept" aria-label="deliveryMethod" formControlName="billingDept">
+            </div>
+            <div class="col form-group">
+              <label for="orderStatus">Order Status</label>
+              <input type="text" class="form-control" id="orderStatus" aria-label="weight" formControlName="orderStatus">
+            </div>
+            <div class="col form-group">
+              <label for="shippingStatus">Shipping Status</label>
+              <input type="text" class="form-control" id="shippingStatus" aria-label="purchaseOrder" formControlName="shippingStatus">
+            </div>
+            <div class="col form-group">
+              <label for="deliveryDate">Delivery Date</label>
+              <input type="text" class="form-control" id="deliveryDate" aria-label="invoiceId" formControlName="deliveryDate">
+            </div>
+          </div>
+          <div class="row g-3 py-2">
+            <div class="col form-group">
+              <label for="orderType">Order Type</label>
+              <input type="text" class="form-control" id="orderType" aria-label="fillDate" formControlName="orderType">
+            </div>
+            <div class="col form-group">
+              <label for="employeeId">Packing Emp Id</label>
+              <input type="text" class="form-control" id="employeeId" aria-label="deliveryMethod" formControlName="employeeId">
+            </div>
+            <div class="col form-group">
+              <label for="total">Total</label>
+              <input type="text" class="form-control" id="total" aria-label="weight" formControlName="total">
+            </div>
+            <div class="col form-group">
+              <label for="warehouseId">Warehouse Id</label>
+              <input type="text" class="form-control" id="warehouseId" aria-label="warehouseId" formControlName="warehouseId">
+            </div>
+            <div class="col form-group">
+
+            </div>
+          </div>
+          <div class="row py-2">Customer Attributes</div>
+          <div class="row g-3" formGroupName="customer">
+            <div class="col form-group">
+              <label for="title">Title</label>
+              <input type="text" class="form-control" id="title" aria-label="Title" formControlName="title">
+            </div>
+            <div class="col form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" class="form-control" id="firstName" aria-label="First name" formControlName="firstName">
+            </div>
+            <div class="col form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" id="lastName" aria-label="Last name" formControlName="lastName">
+            </div>
+          </div>
+          <div class="row py-2">Shipping Address Attributes</div>
+          <div class="row g-3 py-2" formGroupName="shippingAddress">
+            <div class="col form-group">
+              <label for="street">Street</label>
+              <input type="text" class="form-control" id="street" aria-label="Street" formControlName="street">
+            </div>
+            <div class="col form-group">
+              <label for="city">City</label>
+              <input type="text" class="form-control" id="city" aria-label="City" formControlName="city">
+            </div>
+            <div class="col form-group">
+              <label for="state">State</label>
+              <input type="text" class="form-control" id="state" aria-label="State" formControlName="state">
+            </div>
+            <div class="col form-group">
+              <label for="zip">Zip Code</label>
+              <input type="text" class="form-control" id="zip" aria-label="Zip Code" formControlName="zip">
+            </div>
+          </div>
+          <div class="row py-3">
+            <div class="col">
+              <button type="submit" class="btn btn-primary">Search</button>
+              <button type="submit" class="btn btn-secondary mx-5" (click)="resetForm()">Reset</button>
+            </div>
+            <div class="col">
+              <div class="form-check form-select-lg form-switch px-3">
+                <input class="form-check-input" type="checkbox" role="switch" id="useLuceneSwitch" formControlName="lucene">
+                <label class="form-check-label" for="useLuceneSwitch" *ngIf="searchForm.controls['lucene'].value">Use Lucene</label>
+                <label class="form-check-label" for="useLuceneSwitch" *ngIf="!searchForm.controls['lucene'].value">Use Traditional</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <div class="card-body">
+    <table class="table" *ngIf="data">
+      <thead>
+      <tr>
+        <th scope="col">Order Date</th>
+        <th scope="col">Customer</th>
+        <th scope="col">Id</th>
+        <th scope="col">Total Items</th>
+        <th scope="col">Status</th>
+        <th scope="col">Shipping Mtd</th>
+        <th scope="col">Ship Status</th>
+        <th scope="col">PO</th>
+        <th scope="col">Invoice</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let order of data.content, let  i = index">
+        <tr (click)="rowCollapsed[i] = !rowCollapsed[i]">
+          <td>{{ order.orderDate | date: 'short' }}</td>
+          <td>{{ order.customer.title }} {{ order.customer.firstName }} {{ order.customer.lastName }}</td>
+          <td>{{ order.id }}</td>
+          <td>{{ order.totalPieces }}</td>
+          <td>{{ order.orderStatus }}</td>
+          <td>{{ order.shippingMethod }}</td>
+          <td>{{ order.shippingStatus }}</td>
+          <td>{{ order.purchaseOrder }}</td>
+          <td>{{ order.invoiceId }}</td>
+        </tr>
+        <ng-container *ngIf="order.details">
+          <tr #collapse="ngbCollapse" [(ngbCollapse)]="rowCollapsed[i]">
+            <td colspan="9">
+            <table class="table table-borderless">
+              <thead>
+              <tr>
+                <th scope="col">Quantity</th>
+                <th scope="col">Product Id</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Description</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let detail of order.details">
+                <td>{{ detail.quantity}}</td>
+                <td>{{ detail.product.id}}</td>
+                <td>{{ detail.product.name}}</td>
+                <td>{{ detail.product.description}}</td>
+              </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
