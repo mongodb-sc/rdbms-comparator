@@ -36,15 +36,13 @@ public class OrdersController {
 
 
     @GetMapping
-    public Page<Order> getAllOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db){
-        return this.service.getAllOrders(db, null);
+    public Page<Order> getAllOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestParam(name="page", required = false, defaultValue = "0") int page){
+        return this.service.getAllOrders(db, null, page);
     }
 
     @PostMapping("search")
-    public Page<Order> getOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestBody OrderSearch orderSearch){
-        System.out.println(orderSearch);
-        Page<Order> result =this.service.getAllOrders(db, orderSearch);
-        return result;
+    public Page<Order> getOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestBody OrderSearch orderSearch, @RequestParam(name="page", required = false, defaultValue = "0") int page){
+        return this.service.getAllOrders(db, orderSearch, page);
     }
 
 }

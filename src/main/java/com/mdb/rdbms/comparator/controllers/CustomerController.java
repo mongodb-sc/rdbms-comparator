@@ -3,8 +3,10 @@ package com.mdb.rdbms.comparator.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdb.rdbms.comparator.models.Customer;
+import com.mdb.rdbms.comparator.models.CustomerSearch;
 import com.mdb.rdbms.comparator.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,34 +35,11 @@ public class CustomerController {
         return service.update(id, customer);
     }
 
-    @GetMapping
-    public List<Customer> getCustomers(@RequestParam(name = "db", required = false, defaultValue="pg") String db,
-                                       @RequestParam(name="firstName", required = false) String firstName,
-                                       @RequestParam(name="lastName", required = false) String lastName,
-                                       @RequestParam(name="title", required = false) String title,
-                                       @RequestParam(name="city", required = false) String city,
-                                       @RequestParam(name="state", required = false) String state,
-                                       @RequestParam(name="street", required = false) String street,
-                                       @RequestParam(name="zip", required = false) String zip,
-                                       @RequestParam(name="phones", required = false) String phones,
-                                       @RequestParam(name="emails", required = false) String emails){
-        HashMap<String, String> phoneMap = null;
-        HashMap<String, String> emailMap = null;
+    @PostMapping("search")
+    public Page<Customer> getCustomers(@RequestParam(name = "db", required = false, defaultValue="pg") String db,
+                                       @RequestBody CustomerSearch customerSearch, @RequestParam(name="page", required = false, defaultValue = "0") int page ){
 
-        try {
-            if (phones != null) {
-                phoneMap = new ObjectMapper().readValue(phones, HashMap.class);
-            }
-            if (emails != null) {
-                emailMap = new ObjectMapper().readValue(emails, HashMap.class);
-            }
-
-
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return this.service.getCustomers(db, firstName, lastName, title, city, state, street, zip, phoneMap, emailMap);
+        return this.service.getCustomers(db, customerSearch, page);
     }
 
     @GetMapping("{id}")

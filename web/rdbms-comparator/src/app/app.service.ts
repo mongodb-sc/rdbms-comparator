@@ -20,39 +20,12 @@ export class AppService {
   }
 
 
-  getAllCustomers(formValues?: any) :Observable<Customer[]> {
-    let params = new HttpParams();
-    if (formValues) {
-      for (let key in formValues){
-        if  (formValues[key] === null || formValues[key] === ''){
-          delete formValues[key];
-        } else if ( typeof formValues[key] === 'object'){
-          let subObj = formValues[key];
-          for (let subkey in subObj){
-            if (subObj[subkey] === null || subObj[subkey] === ''){
-              delete formValues[key]
-            } else {
-              formValues[key] = JSON.stringify(subObj);
-            }
-          }
-        }
-      }
-      console.log(formValues)
-      params = params.appendAll(formValues);
-    }
-    if (this.useMongo) {
-      console.log('Trying to set the DB param');
-      params = params.append('db', 'mongodb');
-    }
-    return this.http.get<Customer[]>('http://localhost:8080/api/customers', {params: params});
+  getAllCustomers(formValues?: any, newPage?:number) :Observable<Page<Customer[]>> {
+    return this.http.post<Page<Customer[]>>(`http://localhost:8080/api/customers/search?db=${this.useMongo ? 'mongodb' : 'pg'}&page=${newPage ? newPage : 0}`, formValues);
   }
 
-  getAllOrders(formValues?:any) :Observable<Page<Order[]>> {
-    let params = new HttpParams();
-    if (this.useMongo) {
-      params = params.set('db', 'mongodb');
-    }
-    return this.http.post<Page<Order[]>>(`http://localhost:8080/api/orders/search?db=${this.useMongo ? 'mongodb' : 'pg'}`, formValues);
+  getAllOrders(formValues?:any, newPage?: number) :Observable<Page<Order[]>> {
+    return this.http.post<Page<Order[]>>(`http://localhost:8080/api/orders/search?db=${this.useMongo ? 'mongodb' : 'pg'}&page=${newPage ? newPage : 0}`, formValues);
   }
 
 

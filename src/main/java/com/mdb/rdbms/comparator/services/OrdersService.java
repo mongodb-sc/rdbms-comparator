@@ -70,8 +70,8 @@ public class OrdersService {
     }
 
 
-    public Page<Order> getAllOrders(String db, OrderSearch orderSearch){
-        Pageable paging = PageRequest.of(0, 100);
+    public Page<Order> getAllOrders(String db, OrderSearch orderSearch, int page){
+        Pageable paging = PageRequest.of(page, 100);
         if (db.equals("mongodb")) {
             return mongoSearch(orderSearch, paging);
         } else {

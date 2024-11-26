@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {AppComponent} from "./app.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {ReactiveFormsModule} from "@angular/forms";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModule, NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {RouterModule} from "@angular/router";
 import {AppRoutingModule} from "./app-routing.module.tx";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
@@ -28,6 +28,7 @@ import {headersInterceptor} from "./headers.interceptor";
     ReactiveFormsModule,
     BrowserAnimationsModule,
     NgbModule,
+    NgbPaginationModule,
     RouterModule,
     AppRoutingModule
   ],

@@ -1,20 +1,13 @@
 package com.mdb.rdbms.comparator.services;
 
-import com.mdb.rdbms.comparator.models.Address;
-import com.mdb.rdbms.comparator.models.Customer;
-import com.mdb.rdbms.comparator.models.Email;
-import com.mdb.rdbms.comparator.models.Phone;
-import com.mdb.rdbms.comparator.repositories.jpa.AddressJpaRepository;
-import com.mdb.rdbms.comparator.repositories.jpa.CustomerJPARepository;
-import com.mdb.rdbms.comparator.repositories.jpa.EmailJPARepository;
-import com.mdb.rdbms.comparator.repositories.jpa.PhoneJPARepository;
+import com.mdb.rdbms.comparator.models.*;
+import com.mdb.rdbms.comparator.repositories.jpa.*;
 import com.mdb.rdbms.comparator.repositories.mongo.CustomerMongoRepository;
 import com.mongodb.client.MongoClient;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,72 +51,45 @@ public class CustomerService {
         return result;
     }
 
-    public List<Customer> getCustomers(String db, String firstName, String lastName, String title, String city, String state, String street, String zip, HashMap<String, String> phones, HashMap<String, String> emails){
+    public Page<Customer> getCustomers(String db, CustomerSearch customerSearch, int page){
+        Pageable paging = PageRequest.of(page, 100);
         if(db.equals("mongodb")) {
             HashMap<String, Object> params = new HashMap<>();
-            params.put("firstName", firstName);
-            params.put("lastName", lastName);
-            params.put("title", title);
-            params.put("address.city", city);
-            params.put("address.state", state);
-            params.put("address.street", street);
-            params.put("add.resszip", zip);
-            params.values().removeIf(Objects::isNull);
-            if (phones != null){
+            params.put("firstName", customerSearch.getFirstName());
+            params.put("lastName", customerSearch.getLastName());
+            params.put("title", customerSearch.getTitle());
+            params.put("address.city", customerSearch.getCity());
+            params.put("address.state", customerSearch.getState());
+            params.put("address.street", customerSearch.getStreet());
+            params.put("address.zip", customerSearch.getZip());
+            params.values().removeIf(entry -> entry == null || entry.toString().isEmpty());
+
+            if (customerSearch.getPhone() != null && !customerSearch.getPhone().getNumber().isEmpty()){
                 HashMap<String, Object> phoneParams = new HashMap<>();
-                phoneParams.put("$elemMatch", phones);
+                HashMap<String, Object> subParams = new HashMap<>();
+                subParams.put("number", customerSearch.getPhone().getNumber());
+                subParams.put("type", customerSearch.getPhone().getType());
+                phoneParams.put("$elemMatch", subParams);
                 params.put("phones", phoneParams);
             }
-            if (emails != null){
+            if (customerSearch.getEmail() != null && !customerSearch.getEmail().getEmail().isEmpty()){
                 HashMap<String, Object> emailParams = new HashMap<>();
-                emailParams.put("$elemMatch", emails);
+                HashMap<String, Object> subParams = new HashMap<>();
+                subParams.put("email", customerSearch.getEmail().getEmail());
+                subParams.put("type", customerSearch.getEmail().getType());
+                emailParams.put("$elemMatch", subParams);
                 params.put("$elemMatch", emailParams);
             }
-            return mongoRepo.sortCustomers(params);
+            return mongoRepo.sortCustomers(params, paging);
         } else {
 
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Customer> query = cb.createQuery(Customer.class);
             Root<Customer> root = query.from(Customer.class);
-            List<Predicate> predicates = new ArrayList<>();
 
-            if (firstName != null) {
-                predicates.add(cb.equal(root.get("firstName"), firstName));
-            }
-            if (lastName != null) {
-                predicates.add(cb.equal(root.get("lastName"), lastName));
-            }
-            if (title != null) {
-                predicates.add(cb.equal(root.get("title"), title));
-            }
-            if (city != null || state != null || street != null || zip != null) {
-                Join<Customer, Address> addressJoin = root.join("address");
-                if (city != null) {
-                    predicates.add(cb.equal(addressJoin.get("city"), city));
-                }
-                if (state != null) {
-                    predicates.add(cb.equal(addressJoin.get("state"), state));
-                }
-                if (street != null) {
-                    predicates.add(cb.equal(addressJoin.get("street"), street));
-                }
-                if (zip != null) {
-                    predicates.add(cb.equal(addressJoin.get("zip"), zip));
-                }
-            }
-            if (phones != null) {
-                Join<Customer, Phone> phoneJoin = root.join("phones");
-                predicates.add(cb.equal(phoneJoin.get("type"), phones.get("type")));
-                predicates.add(cb.equal(phoneJoin.get("number"), phones.get("number")));
-            }
-            if (emails != null) {
-                Join<Customer, Email> emailJoin = root.join("emails");
-                predicates.add(cb.equal(emailJoin.get("type"), emails.get("type")));
-                predicates.add(cb.equal(emailJoin.get("email"), emails.get("email")));
-            }
-            query.where(predicates.toArray(new Predicate[0]));
+            CustomerSpecification customerSpecification = new CustomerSpecification(customerSearch);
 
-            return entityManager.createQuery(query).getResultList();
+            return custJpaRepo.findAll(customerSpecification, paging);
         }
     }
 
