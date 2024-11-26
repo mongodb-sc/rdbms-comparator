@@ -1,0 +1,42 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/
+      #uri: ${MONGODB_URI}
+      #uri: mongodb+srv://pov_user:pov_pwd@cluster0.bjpsr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: rdbms
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rdbms
+    #url: ${POSTGRES_URI}
+    username: yoda
+    driver-class-name: org.postgresql.Driver
+    password: starwars
+    type: org.postgresql.ds.PGPoolingDataSource
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: create-drop
+        show_sql: false
+    generate-ddl: true
+  application:
+    name: RDBMSComparator
+
+
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core: INFO
+      mongodb:
+        driver: WARN
+
+debug: false
+server:
+  servlet:
+    context-path: /api

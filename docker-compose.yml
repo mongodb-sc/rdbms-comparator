@@ -1,0 +1,33 @@
+services:
+  app:
+    image: 'jesmith17/rdbms_comparator:latest'
+    build:
+      context: .
+    container_name: app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - mongodb_svc
+    environment:
+      POSTGRES_URI: jdbc:postgresql://pg_host:5432/rdbms
+      MONGODB_URI: mongodb://yoda:starwars@mdb_host:27017/?replicaSet=mongodb
+
+  postgres:
+    image: postgres:17.2-alpine3.20
+    container_name: pg_host
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=starwars
+      - POSTGRES_USER=yoda
+      - POSTGRES_DB=rdbms
+  mongodb_svc:
+    hostname: mongodb
+    image: mongodb/mongodb-atlas-local
+    container_name: mdb_host
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=yoda
+      - MONGODB_INITDB_ROOT_PASSWORD=starwars
+    ports:
+      - 27018:27017
