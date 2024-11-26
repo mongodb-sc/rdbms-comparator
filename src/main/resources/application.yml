@@ -36,6 +36,3 @@ logging:
         driver: WARN
 
 debug: false
-server:
-  servlet:
-    context-path: /api

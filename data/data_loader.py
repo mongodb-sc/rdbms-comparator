@@ -136,14 +136,14 @@ def create_orders():
             for detail in order['details']:
                 detail['product'] = random.choice(products)
                 detail['product_id'] = detail['product']['id']
-            response = requests.post(orderUrl, data=json.dumps(order), headers=headers)
+        response = requests.post(orderUrl, data=json.dumps(orders), headers=headers)
         print(f'Created another 100 orders')
 
 
 try:
-    create_customers()
-    create_produts()
-    create_stores()
+    #create_customers()
+    #create_produts()
+    #create_stores()
     create_orders()
 except Exception as e:
     print(f'Error occured: {e}')

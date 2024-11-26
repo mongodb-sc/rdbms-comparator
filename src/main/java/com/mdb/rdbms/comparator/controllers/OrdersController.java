@@ -10,10 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value="api/orders", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins= "http://localhost:4200")
 public class OrdersController {
 
@@ -26,6 +27,17 @@ public class OrdersController {
     public Order create(@RequestBody Order order){
         return service.create(order);
     }
+
+    @PostMapping("batch")
+    public List<Order> create(@RequestBody List<Order> orders){
+        List<Order> results = new ArrayList<>();
+        for(Order order:orders){
+            results.add(service.create(order));
+        }
+        return results;
+
+    }
+
 
     @GetMapping
     public Page<Order> getAllOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db){
