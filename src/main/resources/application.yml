@@ -3,7 +3,6 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/
       #uri: ${MONGODB_URI}
-      #uri: mongodb+srv://pov_user:pov_pwd@cluster0.bjpsr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       database: rdbms
   datasource:
     url: jdbc:postgresql://localhost:5432/rdbms
