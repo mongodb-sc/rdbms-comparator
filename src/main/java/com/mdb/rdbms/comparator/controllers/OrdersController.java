@@ -30,11 +30,7 @@ public class OrdersController {
 
     @PostMapping("batch")
     public List<Order> create(@RequestBody List<Order> orders){
-        List<Order> results = new ArrayList<>();
-        for(Order order:orders){
-            results.add(service.create(order));
-        }
-        return results;
+        return service.createBatch(orders);
 
     }
 

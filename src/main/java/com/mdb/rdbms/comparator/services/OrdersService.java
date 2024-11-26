@@ -63,6 +63,12 @@ public class OrdersService {
         return result;
     }
 
+    public List<Order> createBatch(List<Order> orders){
+        List<Order> results = jpaRepo.saveAll(orders);
+        mongoRepo.saveAll(results);
+        return results;
+    }
+
 
     public Page<Order> getAllOrders(String db, OrderSearch orderSearch){
         Pageable paging = PageRequest.of(0, 100);

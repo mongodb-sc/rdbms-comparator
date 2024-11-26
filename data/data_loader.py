@@ -87,7 +87,7 @@ def create_stores():
 
 
 def create_orders():
-    orderUrl = f'{baseUrl}/orders'
+    orderUrl = f'{baseUrl}/orders/batch'
     orderSchema = Schema(schema=lambda: {
         "orderDate":_('datetime.formatted_datetime', start=2000, end=2024, fmt="%Y-%m-%dT%H:%M:%S.%f"),
         "warehouseId": random.randint(1,9999),
