@@ -159,21 +159,21 @@ def create_stores():
 def create_orders():
     print('Creating Orders... target is 500k so this might take a few minutes')
     orderSchema = Schema(schema=lambda: {
-        "orderDate":_('datetime.formatted_datetime', start=2000, end=2024, fmt="%Y-%m-%dT%H:%M:%S.%f"),
+        "orderDate":_('datetime.datetime', start=2000, end=2024),
         "warehouseId": random.randint(1,9999),
-        "fillDate":_('datetime.formatted_datetime', start=2000, end=2024, fmt="%Y-%m-%dT%H:%M:%S.%f"),
+        "fillDate":_('datetime.datetime', start=2000, end=2024),
         "purchaseOrder": _("random.generate_string_by_mask", mask='@@##@@#@@@@##'),
         "invoiceId": random.randint(1,9999),
-        "invoiceDate":_('datetime.formatted_datetime', start=2000, end=2024, fmt="%Y-%m-%dT%H:%M:%S.%f"),
+        "invoiceDate":_('datetime.datetime', start=2000, end=2024),
         "deliveryMethod":_("choice.choice", items=[ 'Door Dash','Uber','Local','Truck','Cargo Ship','Plane','Rail']),
         "weight": random.randint(1,9999),
         "totalPieces": random.randint(1,9999),
-        "pickDate":_('datetime.formatted_datetime', start=2000, end=2024, fmt="%Y-%m-%dT%H:%M:%S.%f"),
+        "pickDate":_('datetime.datetime', start=2000, end=2024),
         "shippingMethod":_("choice.choice", items=[ 'Drop','Freight','Carrier','USPS']),
         "billingDept": random.randint(1,9999),
         "orderStatus":_("choice.choice", items=[ 'Received','Accepted','Processed','Filling','Filled','Packed','Shipped','Cancelled']),
         "shippingStatus":_("choice.choice", items=[ 'Ticketed','In Transit','At Warehouse','Out for Delivery','Delivered','Delayed','Cancelled']),
-        "deliveryDate":_('datetime.formatted_datetime', start=2000, end=2024, fmt="%Y-%m-%dT%H:%M:%S.%f"),
+        "deliveryDate":_('datetime.datetime', start=2000, end=2024),
         "orderType": random.randint(1,10),
         "employeeId": random.randint(1,234),
         "total":_("finance.price", minimum=0.01, maximum=10000.00),
@@ -217,15 +217,15 @@ def create_orders():
             execute_values(cursor, detailSQL, detailParams)
             pgConn.commit()
         mdb.orders.insert_many(orders)
-        if count % 50000:
+        if count % 50000 == 0:
             print(f'Created {count} orders so far.... be patient')
     print(f'Created {count} orders')
 
 
 try:
-    create_customers()
-    create_products()
-    create_stores()
+    #create_customers()
+    #create_products()
+    #create_stores()
     create_orders()
 except Exception as e:
     print(f'Error occured: {e}')
