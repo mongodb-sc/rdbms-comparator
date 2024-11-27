@@ -51,6 +51,10 @@ public class OrdersService {
 
     public Order create(Order order) {
 
+        mongoRepo.save(order);
+        // How do we do the extended reference pattern correctly?
+
+
         for (OrderDetails details: order.getDetails()){
             Product product = productJPARepository.findById(details.getProduct_id()).get();
             details.setProduct(product);
@@ -58,9 +62,8 @@ public class OrdersService {
         order.setCustomer(customerJPARepository.findById(order.getCustomer_id()).get());
         order.setStore(storeJPARepository.findById(order.getStore_id()).get());
         order.setShippingAddress(addressJPARepository.findById(order.getShippingAddressId()).get());
-        Order result =jpaRepo.save(order);
-        mongoRepo.save(result);
-        return result;
+        return jpaRepo.save(order);
+
     }
 
     public List<Order> createBatch(List<Order> orders){

@@ -36,12 +36,12 @@ public class CustomerService {
 
     public Customer create(Customer customer) {
 
+        mongoRepo.save(customer);
+        customer.set_id(null);
+
         Address saveAddress = addressJpaRepo.save(customer.getAddress());
         customer.setAddress(saveAddress);
-        Customer result = custJpaRepo.save(customer);
-
-        mongoRepo.save(customer);
-        return result;
+        return custJpaRepo.save(customer);
     }
 
 

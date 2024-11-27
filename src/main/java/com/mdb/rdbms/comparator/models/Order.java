@@ -23,8 +23,11 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @MongoId
     Integer id;
+
+    @Transient
+    @MongoId
+    String _id;
 
     Date orderDate;
     Integer warehouseId;
@@ -280,5 +283,13 @@ public class Order {
 
     public void setShippingAddressId(Integer shippingAddressId) {
         this.shippingAddressId = shippingAddressId;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }

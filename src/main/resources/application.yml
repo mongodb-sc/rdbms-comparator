@@ -1,12 +1,12 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/
-      #uri: ${MONGODB_URI}
+      #uri: mongodb://localhost:27017/
+      uri: ${MONGODB_URI}
       database: rdbms
   datasource:
-    url: jdbc:postgresql://localhost:5432/rdbms
-    #url: ${POSTGRES_URI}
+    #url: jdbc:postgresql://localhost:5432/rdbms
+    url: ${POSTGRES_URI}
     username: yoda
     driver-class-name: org.postgresql.Driver
     password: starwars

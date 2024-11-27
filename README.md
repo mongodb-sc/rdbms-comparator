@@ -84,10 +84,18 @@ python data_loader.py
 
 ```
 
-The script assumes that your application is running at localhost:8080/api. If that URL is changed then you will need to update the
-python script to point to the correct place.
+The script inserts records into both databases. It establishes connections to the DB using the public ports defined in the docker compose file. 
+If you adjust the docker compose file then you will need to also adjust this script. 
 
-Data loading can take 10-20 minutes due to the number of records that it's attempting to load. You should be able to access the app during this data loading process.
+> [!NOTE]  
+> docker compose is set to move the default ports for postgres and mongo to ensure that they don't conflict with instances you might 
+> already have locally 
+>  - Postgres is moved to 5433
+>  - Mongo is moved to 27018
+
+> [!IMPORTANT]
+>  The data loading process can take a few minutes. Customers, Products, and Stores all load pretty fast (10K of each being created)
+>  Orders however is creating 500K by default, so it may take 5-10 mimutes. 
 
 
 ### Create mongo indexes

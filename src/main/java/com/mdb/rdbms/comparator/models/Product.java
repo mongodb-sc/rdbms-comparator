@@ -16,8 +16,11 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @MongoId
     Integer id;
+
+    @Transient
+    @MongoId
+    String _id;
 
     String name;
     int dept;
@@ -63,5 +66,13 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }

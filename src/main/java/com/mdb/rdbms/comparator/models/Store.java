@@ -13,9 +13,11 @@ public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @MongoId
     Integer id;
 
+    @Transient
+    @MongoId
+    String _id;
 
     private String name;
 
@@ -82,5 +84,13 @@ public class Store {
 
     public void setSqFt(BigDecimal sqFt) {
         this.sqFt = sqFt;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }
