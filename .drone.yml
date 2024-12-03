@@ -26,7 +26,7 @@ steps:
     settings:
       create_repository: true
       registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
-      repo: sc-north/${DRONE_REPO_NAME}
+      repo: sa-demo/${DRONE_REPO_NAME}
       tags:
         - git-${DRONE_COMMIT_SHA:0:7}
         - latest
@@ -42,7 +42,7 @@ steps:
     image: public.ecr.aws/kanopy/drone-helm:v3
     environment:
       NAMESPACE: sa-demo
-      RELEASE: growth-genie-app
+      RELEASE: rdbms-comparator
     settings:
       chart: mongodb/web-app
       chart_version: 4.24.2
