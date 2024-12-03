@@ -1,0 +1,5 @@
+---
+ingress:
+  hosts:
+    - rdbms-comparator.sa-demo.staging.corp.mongodb.com
+  enabled: true

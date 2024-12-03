@@ -1,0 +1,60 @@
+---
+kind: pipeline
+type: kubernetes
+name: default
+
+trigger:
+  branch:
+    - main
+
+steps:
+  - name: compile-web
+    image: node:alpine
+    commands:
+      - cd web/rdbms-comparator
+      - npm install -g @angular/cli
+      - npm install
+      - ng build -c production
+
+  - name: compile
+    image: gradle:jdk23-alpine
+    commands:
+      - gradle build --no-daemon
+
+  - name: publish
+    image: plugins/kaniko-ecr
+    settings:
+      create_repository: true
+      registry: 795250896452.dkr.ecr.us-east-1.amazonaws.com
+      repo: sc-north/${DRONE_REPO_NAME}
+      tags:
+        - git-${DRONE_COMMIT_SHA:0:7}
+        - latest
+      access_key:
+        from_secret: ecr_access_key
+      secret_key:
+        from_secret: ecr_secret_key
+    when:
+      event:
+        - push
+
+  - name: deploy-staging
+    image: public.ecr.aws/kanopy/drone-helm:v3
+    environment:
+      NAMESPACE: sa-demo
+      RELEASE: growth-genie-app
+    settings:
+      chart: mongodb/web-app
+      chart_version: 4.24.2
+      add_repos: [mongodb=https://10gen.github.io/helm-charts]
+      namespace: sa-demo
+      release: rdbms-comparator
+      values_files: [ "environments/base.yaml", "environments/staging.yaml" ]
+      values: image.tag=git-${DRONE_COMMIT_SHA:0:7},image.repository=795250896452.dkr.ecr.us-east-1.amazonaws.com/sa-demo/${DRONE_REPO_NAME}
+      api_server: https://api.staging.corp.mongodb.com
+      kubernetes_token:
+        from_secret: staging_kubernetes_token
+    when:
+      event:
+        - push
+
