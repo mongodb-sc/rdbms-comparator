@@ -119,7 +119,10 @@ In my experience the external connection requires this configuration
 mongosh "mongodb://yoda:starwars@localhost:27018/rdbms?directConnection=true&authSource=admin"
 ```
 
+## Additional Features
 
+* Ability to display count of SQL statements need to return results from both Postgres and MongoDB
+* 
 
 
 
