@@ -6,7 +6,7 @@ services:
     ingress: true
     port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: 8080
     type: ClusterIP
 ingress:
   enabled: true
