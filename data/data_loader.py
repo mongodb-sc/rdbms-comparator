@@ -8,8 +8,8 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 
-pgConn = psycopg2.connect("postgres://yoda:starwars@localhost:5433/rdbms")
-client = MongoClient('mongodb://yoda:starwars@localhost:27018/?directConnection=true')
+pgConn = psycopg2.connect("postgres://yoda:starwars@rdbms-comparator.cluster-cymtbjk7fwn8.us-east-1.rds.amazonaws.com/rdbms")
+client = MongoClient('mongodb+srv://pov_user:pov_pwd@cluster0.bjpsr.mongodb.net/?retryWrites=true&w=majority&appName=rdbms')
 mdb = client['rdbms']
 
 
@@ -223,9 +223,9 @@ def create_orders():
 
 
 try:
-    #create_customers()
-    #create_products()
-    #create_stores()
+    create_customers()
+    create_products()
+    create_stores()
     create_orders()
 except Exception as e:
     print(f'Error occured: {e}')

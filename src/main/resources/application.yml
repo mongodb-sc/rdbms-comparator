@@ -1,12 +1,12 @@
 spring:
   data:
     mongodb:
-      #uri: mongodb://localhost:27017/
-      uri: ${MONGODB_URI}
+      uri: mongodb+srv://pov_user:pov_pwd@cluster0.bjpsr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      #uri: ${MONGODB_URI}
       database: rdbms
   datasource:
-    #url: jdbc:postgresql://localhost:5432/rdbms
-    url: ${POSTGRES_URI}
+    url: jdbc:postgresql://rdbms-comparator.cluster-cymtbjk7fwn8.us-east-1.rds.amazonaws.com/rdbms
+    #url: ${POSTGRES_URI}
     username: yoda
     driver-class-name: org.postgresql.Driver
     password: starwars
@@ -16,6 +16,7 @@ spring:
       hibernate:
         ddl-auto: create-drop
         show_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
   application:
     name: RDBMSComparator
