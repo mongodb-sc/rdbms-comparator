@@ -3,3 +3,6 @@ ingress:
   hosts:
     - rdbms-comparator.sa-demo.staging.corp.mongodb.com
   enabled: true
+envSecrets:
+  POSTGRES_URI: pg-conn-secret
+  MONGODB_URI: mdb-conn-secret
