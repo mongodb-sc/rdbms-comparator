@@ -8,8 +8,8 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 
-pgConn = psycopg2.connect("postgres://yoda:starwars@rdbms-comparator.cluster-cymtbjk7fwn8.us-east-1.rds.amazonaws.com/rdbms")
-client = MongoClient('mongodb+srv://pov_user:pov_pwd@cluster0.bjpsr.mongodb.net/?retryWrites=true&w=majority&appName=rdbms')
+pgConn = psycopg2.connect("postgres://user:pass@localhost:5433/rdbms")
+client = MongoClient('mongodb://user:pass@localhost:27018/?directConnection=true')
 mdb = client['rdbms']
 
 
