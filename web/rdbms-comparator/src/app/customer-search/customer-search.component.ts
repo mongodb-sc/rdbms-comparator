@@ -36,11 +36,11 @@ export class CustomerSearchComponent implements OnInit{
       state:[''],
       zip:[''],
       street:[''],
-      phones: this.fb.group({
+      phone: this.fb.group({
         type: [''],
         number:[''],
       }),
-      emails: this.fb.group({
+      email: this.fb.group({
         type: [''],
         email: ['']
       })

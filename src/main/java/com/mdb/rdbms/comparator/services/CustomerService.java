@@ -73,12 +73,13 @@ public class CustomerService {
                 params.put("phones", phoneParams);
             }
             if (customerSearch.getEmail() != null && !customerSearch.getEmail().getEmail().isEmpty()){
+                System.out.println("We are adding email to the query");
                 HashMap<String, Object> emailParams = new HashMap<>();
                 HashMap<String, Object> subParams = new HashMap<>();
                 subParams.put("email", customerSearch.getEmail().getEmail());
                 subParams.put("type", customerSearch.getEmail().getType());
                 emailParams.put("$elemMatch", subParams);
-                params.put("$elemMatch", emailParams);
+                params.put("emails", emailParams);
             }
             return mongoRepo.sortCustomers(params, paging);
         } else {

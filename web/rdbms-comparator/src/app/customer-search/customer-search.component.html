@@ -55,10 +55,10 @@
             </div>
           </div>
           <div class="row g-3 py-2">
-            <ng-container formGroupName="phones">
+            <ng-container formGroupName="phone">
               <div class="col form-group">
                 <label for="phone_type">Phone Type</label>
-                <select class="form-control" aria-label="phones.type" formControlName="type" id="phone_type">
+                <select class="form-control" aria-label="phone.type" formControlName="type" id="phone_type">
                   <option selected value="Phone Type">Select Phone Type</option>
                   <option value="home">Home</option>
                   <option value="work">Work</option>
@@ -67,13 +67,13 @@
               </div>
               <div class="col form-group">
                 <label for="number">Phone Number</label>
-                <input type="text" class="form-control"  aria-label="phones.number" formControlName="number" id="number">
+                <input type="text" class="form-control"  aria-label="phone.number" formControlName="number" id="number">
               </div>
             </ng-container>
-            <ng-container formGroupName="emails">
+            <ng-container formGroupName="email">
               <div class="col form-group">
                 <label for="email_type">Email Type</label>
-                <select class="form-control" aria-label="emails.type" formControlName="type" id="email_type">
+                <select class="form-control" aria-label="email.type" formControlName="type" id="email_type">
                   <option selected>Select Phone Type</option>
                   <option value="home">Home</option>
                   <option value="work">Work</option>
@@ -82,7 +82,7 @@
               </div>
               <div class="col form-group">
                 <label for="email">Email</label>
-                <input type="text" id="email" class="form-control" aria-label="emails.email" formControlName="email">
+                <input type="text" id="email" class="form-control" aria-label="email.email" formControlName="email">
               </div>
             </ng-container>
           </div>
