@@ -13,6 +13,8 @@ import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
 import org.bson.BsonArray;
 import org.bson.Document;
+import org.hibernate.Session;
+import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -102,7 +104,7 @@ public class OrdersService {
                 result = new PageImpl<>(searchResults, paging, 1000L);
             }
 
-        return result;
+        return new MetricsPage<Order>(result, 1);
     }
 
 
@@ -112,7 +114,11 @@ public class OrdersService {
         CriteriaQuery<Order> criteria = cb.createQuery(Order.class);
         Root<Order> root = criteria.from(Order.class);
         OrderSpecification orderSpec = new OrderSpecification(orderSearch);
-        return jpaRepo.findAll(orderSpec, paging);
+        Session session = entityManager.unwrap(Session.class);
+        Statistics stats = session.getSessionFactory().getStatistics();
+        stats.clear();
+        Page<Order> results = jpaRepo.findAll(orderSpec, paging);
+        return new MetricsPage<>(results, stats.getPrepareStatementCount()  );
     }
 
     private HashMap<String, Object> mongoQuery(HashMap<String, Object> params, OrderSearch orderSearch){

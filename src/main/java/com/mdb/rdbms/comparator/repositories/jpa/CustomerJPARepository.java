@@ -1,7 +1,10 @@
 package com.mdb.rdbms.comparator.repositories.jpa;
 
 import com.mdb.rdbms.comparator.models.Customer;
+import com.mdb.rdbms.comparator.models.MetricsPage;
 import com.mdb.rdbms.comparator.models.Order;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +17,6 @@ import java.util.List;
 
 @Repository
 public interface CustomerJPARepository extends JpaRepository<Customer, Integer>, JpaSpecificationExecutor<Customer> {
-
-
 
 
 

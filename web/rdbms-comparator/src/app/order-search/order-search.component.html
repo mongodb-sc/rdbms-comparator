@@ -5,7 +5,10 @@
         <p class="card-title">Orders</p>
         <ng-container *ngIf="!elapsed.loading">
           <p class="card-subtitle">Retrieval took {{ elapsed.duration }} {{elapsed.elapsedLabel}}</p>
-          <p *ngIf="data" class="card-subtitle">Found {{data.totalElements}}. Showing {{ data.size }} per page.  </p>
+            <ng-container *ngIf="data">
+                <p class="card-subtitle">Found {{data.totalElements}}. Showing {{ data.size }} per page.  </p>
+                <p *ngIf="data.queriesIssued" class="card-subtitle">Issued {{data.queriesIssued}} queries to obtain results.  </p>
+            </ng-container>
         </ng-container>
       </div>
       <div class="align-items-end col-2">

@@ -65,14 +65,14 @@ public class Order {
     @JoinColumn(name="customer_id", referencedColumnName = "id")
     Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name="store_id", referencedColumnName = "id")
     Store store;
 
     BigDecimal total;
 
     //@JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name="order_id", referencedColumnName = "id")
     List<OrderDetails> details;
 

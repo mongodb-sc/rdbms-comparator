@@ -7,4 +7,5 @@ export interface Page<T> {
   totalElements:number;
   totalPages:number;
   size: number;
+  queriesIssued: number;
 }
