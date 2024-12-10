@@ -1,17 +1,24 @@
 package com.mdb.rdbms.comparator.services;
 
+import com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener;
 import com.mdb.rdbms.comparator.models.*;
 import com.mdb.rdbms.comparator.repositories.jpa.*;
 import com.mdb.rdbms.comparator.repositories.mongo.CustomerMongoRepository;
 import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.*;
+
 import org.hibernate.Session;
 import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.observability.MongoHandlerObservationConvention;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,12 +26,14 @@ import java.util.HashMap;
 @Service
 public class CustomerService {
 
-
-    @Autowired
-    ObservationRegistry registry;
-
     @Autowired
     CustomerMongoRepository mongoRepo;
+
+    @Autowired
+    MeterRegistry registry;
+
+    @Autowired
+    MongoClient mongoClient;
 
     @Autowired
     EntityManager entityManager;
@@ -34,9 +43,8 @@ public class CustomerService {
 
     @Autowired
     AddressJpaRepository addressJpaRepo;
-
-
-
+    @Autowired
+    private MongoClient mongo;
 
 
     public Customer create(Customer customer) {
@@ -85,8 +93,9 @@ public class CustomerService {
                 emailParams.put("$elemMatch", subParams);
                 params.put("emails", emailParams);
             }
+
             Page<Customer> results = mongoRepo.sortCustomers(params, paging);
-            return new MetricsPage<>(results, 1);
+            return new MetricsPage<>(results, 2);
         } else {
 
             CustomerSpecification customerSpecification = new CustomerSpecification(customerSearch);
