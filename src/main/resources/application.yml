@@ -37,6 +37,10 @@ management:
         enabled: true
   tracing:
     enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: metrics
 
 
 

@@ -43,8 +43,6 @@ public class CustomerService {
 
     @Autowired
     AddressJpaRepository addressJpaRepo;
-    @Autowired
-    private MongoClient mongo;
 
 
     public Customer create(Customer customer) {
@@ -93,9 +91,10 @@ public class CustomerService {
                 emailParams.put("$elemMatch", subParams);
                 params.put("emails", emailParams);
             }
-
+            double startCount = registry.counter("queries.issued").count();
             Page<Customer> results = mongoRepo.sortCustomers(params, paging);
-            return new MetricsPage<>(results, 2);
+            double queriesCount = registry.counter("queries.issued").count() - startCount;
+            return new MetricsPage<>(results, queriesCount);
         } else {
 
             CustomerSpecification customerSpecification = new CustomerSpecification(customerSearch);
@@ -103,7 +102,7 @@ public class CustomerService {
             Statistics stats = session.getSessionFactory().getStatistics();
             stats.clear();
             Page<Customer> results = custJpaRepo.findAll(customerSpecification, paging);
-            return new MetricsPage<>(results, stats.getPrepareStatementCount());
+            return new MetricsPage<>(results, stats.getPrepareStatementCount(), stats.getQueries());
 
         }
     }

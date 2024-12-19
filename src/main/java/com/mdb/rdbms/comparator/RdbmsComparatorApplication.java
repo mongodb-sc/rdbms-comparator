@@ -1,6 +1,8 @@
 package com.mdb.rdbms.comparator;
 
 import com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.mongodb.MongoMetricsCommandListener;
 import io.micrometer.observation.ObservationRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,10 +25,9 @@ public class RdbmsComparatorApplication {
 
 
     @Bean
-    MongoClientSettingsBuilderCustomizer mongoMetricsSynchronousContextProvider(ObservationRegistry registry) {
-        return (clientSettingsBuilder) -> {
-            clientSettingsBuilder.contextProvider(ContextProviderFactory.create(registry))
-                    .addCommandListener(new MongoDBCommandCountListener(registry));
+    MongoClientSettingsBuilderCustomizer mongoMetricsSynchronousContextProvider(MeterRegistry registry) {
+        return (builder) -> {
+            builder.addCommandListener(new MongoDBCommandCountListener(registry));
         };
     }
 

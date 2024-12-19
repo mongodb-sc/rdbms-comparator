@@ -8,6 +8,7 @@ import com.mdb.rdbms.comparator.models.Order;
 import com.mdb.rdbms.comparator.repositories.jpa.*;
 import com.mdb.rdbms.comparator.repositories.mongo.OrderMongoRepository;
 import com.mdb.rdbms.comparator.repositories.mongo.ProductMongoRepository;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
@@ -50,6 +51,9 @@ public class OrdersService {
     @Autowired
     ProductMongoRepository productRepo;
 
+    @Autowired
+    MeterRegistry registry;
+
 
     public Order create(Order order) {
 
@@ -90,21 +94,23 @@ public class OrdersService {
         Page<Order> result = null;
         int skip = 0;
         int limit = 100;
-            if (!orderSearch.isLucene()) {
-               params = this.mongoQuery(params, orderSearch);
-               result = mongoRepo.searchOrders(params,paging);
-            } else {
-                JsonArray jsonArray = this.mongoLucene(orderSearch);
-                List<Document> query = new ArrayList<>();
-                for (JsonElement jsonElement : jsonArray) {
-                    query.add(Document.parse(jsonElement.toString()));
-                }
-
-                List<Order> searchResults = mongoRepo.searchOrdersLucene(query, skip, limit);
-                result = new PageImpl<>(searchResults, paging, 1000L);
+        double startCount = registry.counter("queries.issued").count();
+        if (!orderSearch.isLucene()) {
+           params = this.mongoQuery(params, orderSearch);
+           result = mongoRepo.searchOrders(params ,paging);
+        } else {
+            JsonArray jsonArray = this.mongoLucene(orderSearch);
+            List<Document> query = new ArrayList<>();
+            for (JsonElement jsonElement : jsonArray) {
+                query.add(Document.parse(jsonElement.toString()));
             }
-
-        return new MetricsPage<Order>(result, 1);
+            System.out.println(query.toString());
+            List<Order> searchResults = mongoRepo.searchOrdersLucene(query, skip, limit);
+            long totalRecords = mongoRepo.count();
+            result = new PageImpl<>(searchResults, paging, totalRecords);
+        }
+        double queriesCount = registry.counter("queries.issued").count() - startCount;
+        return new MetricsPage<Order>(result, queriesCount);
     }
 
 
