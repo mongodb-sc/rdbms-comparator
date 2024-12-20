@@ -4,6 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Timestamp;
+import java.sql.Time;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -11,7 +14,9 @@ import java.util.function.Function;
 public class MetricsPage<T> extends PageImpl<T> {
 
     double queriesIssued = 1;
-    String[] queries;
+    String threadName;
+    long threadId;
+    long millis;
 
 
     public MetricsPage(List<T> content, Pageable pageable, long total) {
@@ -25,13 +30,11 @@ public class MetricsPage<T> extends PageImpl<T> {
     public MetricsPage(Page<T> page, double queriesIssued) {
         super(page.getContent(), page.getPageable(), page.getTotalElements());
         this.queriesIssued = queriesIssued;
+        this.threadName = Thread.currentThread().getName();
+        this.threadId = Thread.currentThread().getId();
+        this.millis = System.currentTimeMillis();
     }
 
-    public MetricsPage(Page<T> page, double queriesIssued, String[] queries) {
-        super(page.getContent(), page.getPageable(), page.getTotalElements());
-        this.queriesIssued = queriesIssued;
-        this.queries = queries;
-    }
 
     public double getQueriesIssued() {
         return queriesIssued;
@@ -41,11 +44,27 @@ public class MetricsPage<T> extends PageImpl<T> {
         this.queriesIssued = queriesIssued;
     }
 
-    public String[] getQueries() {
-        return queries;
+    public String getThreadName() {
+        return threadName;
     }
 
-    public void setQueries(String[] queries) {
-        this.queries = queries;
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
+    }
+
+    public long getMillis() {
+        return millis;
+    }
+
+    public void setMillis(long millis) {
+        this.millis = millis;
     }
 }

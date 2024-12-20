@@ -5,6 +5,7 @@ import {Customer} from "./models/customer";
 import {Order} from "./models/Order";
 import {Page} from "./models/page";
 import { environment } from "../environments/environment";
+import {Query} from "./models/Query";
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,11 @@ export class AppService {
 
   getAllOrders(formValues?:any, newPage?: number) :Observable<Page<Order[]>> {
     return this.http.post<Page<Order[]>>(`${this.baseUrl}/api/orders/search?db=${this.useMongo ? 'mongodb' : 'pg'}&page=${newPage ? newPage : 0}`, formValues);
+  }
+
+  getQueries(threadName:string, threadId:number, millis:number) :Observable<Query[]> {
+    let params = new HttpParams().set('threadName', threadName).set('threadId', threadId).set('time', millis)
+    return this.http.get<Query[]>(`${this.baseUrl}/api/queries`, {params:params});
   }
 
 

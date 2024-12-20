@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {AppService} from "../app.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
@@ -6,6 +6,8 @@ import {Customer} from "../models/customer";
 import {Order} from "../models/Order";
 import {Address} from "../models/address";
 import {Page} from "../models/page";
+import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
+import {Query} from "../models/Query";
 
 @Component({
   selector: 'app-order-search',
@@ -15,18 +17,19 @@ import {Page} from "../models/page";
 export class OrderSearchComponent implements OnInit{
 
   data?: Page<Order[]>
+  queries?: Observable<Query[]>
   elapsed = {
     duration:  0,
     elapsedLabel: '',
     loading:true
   }
 
-  isCollapsed = false;
+  isCollapsed = true;
   rowCollapsed: Array<boolean> = new Array<boolean>(100);
   searchForm: FormGroup;
   useMongo:boolean;
 
-  constructor(private service:AppService, private fb:FormBuilder) {
+  constructor(private service:AppService, private fb:FormBuilder, private offCanvasService: NgbOffcanvas) {
     this.rowCollapsed.fill(true);
     this.useMongo = this.service.useMongo;
 
@@ -115,5 +118,13 @@ export class OrderSearchComponent implements OnInit{
     this.searchForm.reset(this.searchForm.value);
   }
 
+  open(content: TemplateRef<any>) {
+    this.offCanvasService.open(content, { position: 'bottom', ariaLabelledBy: 'offcanvas-basic-title' }).result.then(
+
+    );
+    if (this.data) {
+      this.queries = this.service.getQueries(this.data.threadName, this.data.threadId, this.data.millis)
+    }
+  }
 
 }

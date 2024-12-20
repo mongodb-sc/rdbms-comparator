@@ -1,0 +1,34 @@
+Configuration:
+  Appenders:
+    Console:
+      name: "CONSOLE"
+      PatternLayout:
+        pattern: "%d [%t] %p %c - %m%n"
+    NoSql:
+      name: "MONGO"
+      MongoDb:
+        connection: "mongodb://localhost:27017/rdbms.logs"
+  Loggers:
+    Root:
+      level: "DEBUG"
+      AppenderRef:
+        - ref: "CONSOLE"
+          level: "INFO"
+    Logger:
+      - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
+        level: "WARN"
+      - name: "org.springframework.data.mongodb.core"
+        level: "DEBUG"
+        AppenderRef:
+          - ref: "CONSOLE"
+            level: "DEBUG"
+      - name: "com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener"
+        level: "INFO"
+        AppenderRef:
+          - ref: "CONSOLE"
+          - ref: "MONGO"
+      - name: "org.hibernate.SQL"
+        level: "DEBUG"
+        AppenderRef:
+          - ref: "MONGO"
+

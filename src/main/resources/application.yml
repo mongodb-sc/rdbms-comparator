@@ -14,15 +14,10 @@ spring:
       hibernate:
         ddl-auto: create-drop
         show_sql: false
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         generate_statistics: true
     generate-ddl: true
   application:
     name: RDBMSComparator
-  boot:
-    actuator:
-      autoconfigure:
-        enabled:true
 
   jackson:
     serialization:
@@ -44,19 +39,20 @@ management:
 
 
 
-logging:
-  level:
-    org:
-      springframework:
-        data:
-          mongodb:
-            core: DEBUG
-      hibernate:
-        engine:
-          internal:
-            StatisticalLoggingSessionEventListener: WARN
-      mongodb:
-        driver: INFO
 
+#logging:
+#  level:
+#    org:
+#      springframework: INFO
+##        data:
+##          mongodb:
+##            core: DEBUG
+#      hibernate:
+#        engine:
+#          internal:
+#            StatisticalLoggingSessionEventListener: WARN
+##      mongodb:
+##        driver: INFO
+#
 
 debug: false

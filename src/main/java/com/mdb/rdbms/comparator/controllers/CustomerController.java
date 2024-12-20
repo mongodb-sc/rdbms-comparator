@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdb.rdbms.comparator.models.Customer;
 import com.mdb.rdbms.comparator.models.CustomerSearch;
 import com.mdb.rdbms.comparator.services.CustomerService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -17,6 +19,8 @@ import java.util.List;
 @RequestMapping(value="api/customers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins= "http://localhost:4200")
 public class CustomerController {
+
+    Logger logger = LogManager.getLogger(CustomerController.class);
 
     @Autowired
     CustomerService service;
@@ -39,7 +43,9 @@ public class CustomerController {
     public Page<Customer> getCustomers(@RequestParam(name = "db", required = false, defaultValue="pg") String db,
                                        @RequestBody CustomerSearch customerSearch, @RequestParam(name="page", required = false, defaultValue = "0") int page ){
 
+
         return this.service.getCustomers(db, customerSearch, page);
+
     }
 
     @GetMapping("{id}")

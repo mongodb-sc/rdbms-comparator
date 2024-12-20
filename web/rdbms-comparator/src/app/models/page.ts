@@ -8,4 +8,7 @@ export interface Page<T> {
   totalPages:number;
   size: number;
   queriesIssued: number;
+  threadName:string;
+  threadId:number;
+  millis:number;
 }

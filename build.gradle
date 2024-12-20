@@ -13,6 +13,10 @@ java {
     }
 }
 
+bootRun {
+    systemProperty( 'log4j.debug', true)
+}
+
 repositories {
     mavenCentral()
 }
@@ -20,6 +24,8 @@ repositories {
 dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
     implementation 'org.postgresql:postgresql'
     implementation 'org.springframework.data:spring-data-mongodb:4.4.0'
     implementation 'org.springframework.data:spring-data-commons:3.4.0'
@@ -29,8 +35,17 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "me.paulschwarz:spring-dotenv:4.0.0"
+    implementation 'org.apache.logging.log4j:log4j-mongodb:2.24.3'
+    implementation "org.springframework.boot:spring-boot-starter-log4j2:3.4.0"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    runtimeOnly 'org.apache.logging.log4j:log4j-layout-template-json'
+
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
 }
 
 tasks.named('test') {

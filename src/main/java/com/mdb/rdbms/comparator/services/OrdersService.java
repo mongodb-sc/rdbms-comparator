@@ -124,7 +124,8 @@ public class OrdersService {
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
         Page<Order> results = jpaRepo.findAll(orderSpec, paging);
-        return new MetricsPage<>(results, stats.getPrepareStatementCount()  );
+        System.out.println(stats.getQueryExecutionCount());
+        return new MetricsPage<>(results, stats.getPrepareStatementCount());
     }
 
     private HashMap<String, Object> mongoQuery(HashMap<String, Object> params, OrderSearch orderSearch){

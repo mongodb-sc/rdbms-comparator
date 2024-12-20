@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {AppService} from "../app.service";
 import {Observable} from "rxjs";
 import {Customer} from "../models/customer";
 import {reportUnhandledError} from "rxjs/internal/util/reportUnhandledError";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Page} from "../models/page";
+import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
+import {Query} from "../models/Query";
 
 @Component({
   selector: 'app-customer-search',
@@ -14,6 +16,7 @@ import {Page} from "../models/page";
 export class CustomerSearchComponent implements OnInit{
 
   data?: Page<Customer[]>;
+  queries?: Observable<Query[]>
   elapsed = {
     duration:  0,
     elapsedLabel: '',
@@ -26,7 +29,7 @@ export class CustomerSearchComponent implements OnInit{
 
   searchForm: FormGroup;
 
-  constructor(private service: AppService, private fb:FormBuilder) {
+  constructor(private service: AppService, private fb:FormBuilder, private offCanvasService: NgbOffcanvas) {
 
     this.searchForm = this.fb.group({
       firstName: [''],
@@ -89,6 +92,16 @@ export class CustomerSearchComponent implements OnInit{
   resetForm() {
     this.searchForm.reset(this.searchForm.value);
   }
+
+  open(content: TemplateRef<any>) {
+    if (this.data) {
+      this.queries = this.service.getQueries(this.data?.threadName, this.data?.threadId, this.data?.millis);
+    }
+    this.offCanvasService.open(content, { position: 'bottom', ariaLabelledBy: 'offcanvas-basic-title' }).result.then(
+    );
+
+  }
+
 
 
 }

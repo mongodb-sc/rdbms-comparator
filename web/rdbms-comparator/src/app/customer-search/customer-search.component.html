@@ -1,3 +1,16 @@
+<ng-template #content let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvas-basic-title">Queries Executed</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body" *ngIf="data">
+        <ul>
+            <li *ngFor="let query of queries | async as queries">
+                {{query.message}}
+            </li>
+        </ul>
+    </div>
+</ng-template>
 <div class="card shadow-lg">
   <div class="card-header">
     <div class="row">
@@ -15,11 +28,7 @@
         <button class="btn btn-outline-primary" type="button" (click)="refresh()">Refresh Data</button>
       </div>
       <div class="col-2">
-        <div class="form-check form-select-lg form-switch px-3">
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" (change)="collapse.toggle()" [checked]="isCollapsed">
-          <label class="form-check-label" for="flexSwitchCheckDefault" *ngIf="isCollapsed">Show Search Form</label>
-          <label class="form-check-label" for="flexSwitchCheckDefault" *ngIf="!isCollapsed">Hide Search Form</label>
-        </div>
+          <button class="btn btn-secondary" type="button" (click)="open(content)">Show Queries</button>
       </div>
     </div>
     <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
@@ -100,7 +109,7 @@
     </div>
 
   </div>
-  <div class="card-body"  *ngIf="data">
+  <div class="card-body"  *ngIf="data && !elapsed.loading">
     <ngb-pagination *ngIf="data.totalElements"
       [collectionSize]="data.totalElements"
       [page]="data.pageable.pageNumber + 1"

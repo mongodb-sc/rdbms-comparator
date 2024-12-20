@@ -1,30 +1,27 @@
 package com.mdb.rdbms.comparator.services;
 
-import com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener;
 import com.mdb.rdbms.comparator.models.*;
 import com.mdb.rdbms.comparator.repositories.jpa.*;
 import com.mdb.rdbms.comparator.repositories.mongo.CustomerMongoRepository;
-import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
-import io.micrometer.observation.Observation;
-import io.micrometer.observation.ObservationRegistry;
 import jakarta.persistence.EntityManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.observability.MongoHandlerObservationConvention;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
 @Service
 public class CustomerService {
+
+    private static final Logger logger = LogManager.getLogger(CustomerService.class);
+
 
     @Autowired
     CustomerMongoRepository mongoRepo;
@@ -102,7 +99,7 @@ public class CustomerService {
             Statistics stats = session.getSessionFactory().getStatistics();
             stats.clear();
             Page<Customer> results = custJpaRepo.findAll(customerSpecification, paging);
-            return new MetricsPage<>(results, stats.getPrepareStatementCount(), stats.getQueries());
+            return new MetricsPage<>(results, stats.getPrepareStatementCount());
 
         }
     }

@@ -56,7 +56,7 @@ public class Order {
     @Transient
     Integer shippingAddressId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name="address_id", referencedColumnName = "id")
     Address shippingAddress;
 
