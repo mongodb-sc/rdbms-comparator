@@ -13,7 +13,7 @@ Configuration:
       level: "DEBUG"
       AppenderRef:
         - ref: "CONSOLE"
-          level: "INFO"
+          level: "DEBUG"
     Logger:
       - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
         level: "WARN"
@@ -31,4 +31,8 @@ Configuration:
         level: "DEBUG"
         AppenderRef:
           - ref: "MONGO"
+      - name: "org.springframework"
+        level: "DEBUG"
+        AppenderRef:
+          - ref: "CONSOLE"
 

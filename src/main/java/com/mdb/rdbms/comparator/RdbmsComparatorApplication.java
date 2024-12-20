@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.observability.MongoObservationCommandLis
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.repository.query.QueryLookupStrategy;
 
+
 @SpringBootApplication
 @EnableJpaRepositories(basePackages= "com.mdb.rdbms.comparator.repositories.jpa")
 @EnableMongoRepositories(basePackages= "com.mdb.rdbms.comparator.repositories.mongo", queryLookupStrategy = QueryLookupStrategy.Key.CREATE_IF_NOT_FOUND)

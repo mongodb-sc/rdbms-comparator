@@ -18,11 +18,11 @@ spring:
     generate-ddl: true
   application:
     name: RDBMSComparator
+  debug: true
 
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
-
 management:
   observability:
     enabled: true
@@ -35,24 +35,20 @@ management:
   endpoints:
     web:
       exposure:
-        include: metrics
+        include:
+        - metrics
+        - open-api
+        - swagger-ui
+
+
+# /api-docs endpoint custom path
+springdoc:
+#  api-docs:
+#    path: /api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    enabled: true
+  show-actuator: true
 
 
 
-
-#logging:
-#  level:
-#    org:
-#      springframework: INFO
-##        data:
-##          mongodb:
-##            core: DEBUG
-#      hibernate:
-#        engine:
-#          internal:
-#            StatisticalLoggingSessionEventListener: WARN
-##      mongodb:
-##        driver: INFO
-#
-
-debug: false
