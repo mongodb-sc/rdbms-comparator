@@ -6,3 +6,4 @@ ingress:
 envSecrets:
   POSTGRES_URI: pg-conn-secret
   MONGODB_URI: mdb-conn-secret
+  MONGODB_LOGGING_URI: mdb-log-conn-secret

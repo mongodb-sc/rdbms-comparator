@@ -7,13 +7,13 @@ Configuration:
     NoSql:
       name: "MONGO"
       MongoDb:
-        connection: "mongodb://localhost:27017/rdbms.logs"
+        connection: "${env:MONGODB_LOGGING_URI}"
   Loggers:
     Root:
       level: "DEBUG"
       AppenderRef:
         - ref: "CONSOLE"
-          level: "DEBUG"
+          level: "INFO"
     Logger:
       - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
         level: "WARN"
@@ -25,14 +25,13 @@ Configuration:
       - name: "com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener"
         level: "INFO"
         AppenderRef:
-          - ref: "CONSOLE"
           - ref: "MONGO"
       - name: "org.hibernate.SQL"
         level: "DEBUG"
         AppenderRef:
           - ref: "MONGO"
       - name: "org.springframework"
-        level: "DEBUG"
+        level: "INFO"
         AppenderRef:
           - ref: "CONSOLE"
 
