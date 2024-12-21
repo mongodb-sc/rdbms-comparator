@@ -4,6 +4,7 @@ package com.mdb.rdbms.comparator.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,8 +19,8 @@ import java.util.List;
 @Table(name = "customers", indexes = {
     @Index(name = "first_last_idx", columnList = "firstName, lastName DESC")
 })
+@BatchSize(size=50)
 @Document("customers")
-@CompoundIndex(name = "first_last_city_idx", def = "{'firstname': 1, 'lastname': 1, 'address.city': 1}")
 public class Customer {
 
     public Customer(){};

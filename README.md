@@ -13,29 +13,7 @@ would gone to RDBMS systems.
 
 ## How to Demo
 
-Open your browser to    http://localhost:8080/index.html  This should load a page that looks like this.  
-
-![image](img/screenshot.png)
-
-The purpose of the app (and this will hopefull evolve) is to highlight the challenges when dealing with complex data, and with large amounts of data
-when working in RDBMS platforms like postgres. 
-There are 2 pages in the app, both accessible from the menu at the top
-- Customers
-- Orders
-
-Both pages follow the same basic premise. Allow the user to search for records by a wide array of fields and show the response. 
-Once the search is completed in the header of the search box you will see response times displayed that show how long the search took and how many records it found.
-
-### Controlling the DB
-In the header bar you will see a toggle switch. This allows you to control which DB implementation is performing the retrieval. By default it uses Postgres, but can be switched
-to mongo by clicking on the slider.  To compare and contrast the options, simply click on the slider and then use either the "Refresh Data" or "Search" buttons in the search form. 
-This will execute the exact same search, but using the other DB implementation. 
-
-![image](img/lucene.png)
-
-On the orders page you will see an additional switch at the bottom of the search screen. This allows you to toggle between
-traditional MongoDB searches and Lucene based searches (which is why the demo requires the Atlas CLI). This can give you further contrast points with 
-RDBMS solutions around how Atlas Search can benefit from index intersection. 
+For details and tips on how to use this demo in your sales process see [How to Demo](DEMO.md)
 
 ## Dependencies
 

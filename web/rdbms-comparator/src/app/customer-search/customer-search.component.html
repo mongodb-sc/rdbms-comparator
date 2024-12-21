@@ -15,12 +15,12 @@
   <div class="card-header">
     <div class="row">
       <div class="col-8">
-        <p class="card-title">Customers</p>
+        <h3 class="card-title">Customers</h3>
         <ng-container *ngIf="!elapsed.loading">
-          <p class="card-subtitle">Retrieval took {{ elapsed.duration }} {{elapsed.elapsedLabel}}</p>
+          <p class="card-subtitle"><i class="bi bi-clock"> {{ elapsed.duration }} {{elapsed.elapsedLabel}}</i></p>
             <ng-container *ngIf="data">
                 <p class="card-subtitle">Found {{data.totalElements}}. Showing {{ data.size }} per page. </p>
-                <p *ngIf="data.queriesIssued" class="card-subtitle">Issued {{data.queriesIssued}} queries to obtain results. </p>
+                <p *ngIf="data.queriesIssued" class="card-subtitle"><i class="bi bi-search"></i>  {{data.queriesIssued}} queries to obtain results. </p>
             </ng-container>
         </ng-container>
       </div>
