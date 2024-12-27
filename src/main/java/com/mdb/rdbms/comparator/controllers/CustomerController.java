@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdb.rdbms.comparator.models.Customer;
 import com.mdb.rdbms.comparator.models.CustomerSearch;
+import com.mdb.rdbms.comparator.models.Response;
 import com.mdb.rdbms.comparator.services.CustomerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +30,7 @@ public class CustomerController {
 
 
     @PostMapping
-    public Customer create(@RequestBody Customer customer){
+    public Response<Customer> create(@RequestBody Customer customer){
         return service.create(customer);
     }
 

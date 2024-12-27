@@ -1,0 +1,123 @@
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h3 class="card-title">Create New Customer</h3>
+    </div>
+    <form [formGroup]="customerForm" (submit)="save()">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" class="form-control"  aria-label="Title" formControlName="title">
+                </div>
+                <div class="col form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control"  aria-label="First name" formControlName="firstName" id="firstName">
+                </div>
+                <div class="col form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control"  aria-label="Last name" formControlName="lastName" id="lastName">
+                </div>
+            </div>
+            <div class="row g-3 py-2" formGroupName="address">
+                <div class="col form-group">
+                    <label for="street">Street</label>
+                    <input type="text" class="form-control"  aria-label="Street" formControlName="street" id="street">
+                </div>
+                <div class="col form-group">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control"  aria-label="City" formControlName="city" id="city">
+                </div>
+                <div class="col form-group">
+                    <label for="state">State</label>
+                    <input type="text" class="form-control"  aria-label="State" formControlName="state" id="state">
+                </div>
+                <div class="col form-group">
+                    <label for="zip">Zip</label>
+                    <input type="text" class="form-control"  aria-label="Zip Code" formControlName="zip" id="zip">
+                </div>
+            </div>
+            <div class="row g-3 py-2">
+                <div class="col-6">
+                    <h4>Phone Numbers</h4>
+                    <ng-container formArrayName="phones">
+                        <ng-container *ngFor="let item of phones.controls; index as i">
+                            <div class="row" [formGroupName]="i">
+                            <div class="col form-group">
+                                <label for="phone_type">Phone Type</label>
+                                <select class="form-control" aria-label="phone.type" formControlName="type" id="phone_type">
+                                    <option selected value="Phone Type">Select Phone Type</option>
+                                    <option value="home">Home</option>
+                                    <option value="work">Work</option>
+                                    <option value="mobile">Mobile</option>
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="number">Phone Number</label>
+                                <input type="text" class="form-control"  aria-label="phone.number" formControlName="number" id="number">
+                            </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <button type="button" class="btn-sm btn-primary mt-2" (click)="addPhone()">+</button>
+                </div>
+                <div class="col-6">
+                    <h4>Emails</h4>
+                    <ng-container formArrayName="emails">
+                        <ng-container *ngFor="let item of emails.controls; index as i">
+                            <div class="row" [formGroupName]="i">
+                            <div class="col form-group">
+                                <label for="email_type">Email Type</label>
+                                <select class="form-control" aria-label="email.type" formControlName="type" id="email_type">
+                                    <option selected>Select Phone Type</option>
+                                    <option value="home">Home</option>
+                                    <option value="work">Work</option>
+                                    <option value="mobile">Mobile</option>
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label for="email">Email</label>
+                                <input type="text" id="email" class="form-control" aria-label="email.email" formControlName="email">
+                            </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <button type="button" class="btn-sm btn-primary mt-2" (click)="addEmail()">+</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row py-3">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-outline-primary mx-3" (click)="resetForm()">Reset</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="alert alert-success mt-5" role="alert" *ngIf="customer">
+    The customer was successfully created.
+    <ng-container>
+    <ul>
+        <li  *ngFor="let metric of customer.metrics"><span>DB: {{metric.db}}:  Elapsed time of: {{metric.elapsedTime}} ms with queries issued: {{metric.queriesIssued}}</span></li>
+    </ul>
+    <div>
+        <button type="button" class="btn btn-secondary" (click)="open(content)">Show Queries</button>
+    </div>
+    </ng-container>
+</div>
+<ng-template #content let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvas-basic-title">Queries Executed</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body" *ngIf="customer">
+        <ol>
+            <li *ngFor="let query of queries | async as queries">
+                {{query.message}}
+            </li>
+        </ol>
+
+    </div>
+
+</ng-template>

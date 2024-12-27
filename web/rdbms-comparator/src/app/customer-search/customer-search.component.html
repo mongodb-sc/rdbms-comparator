@@ -4,11 +4,11 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
     </div>
     <div class="offcanvas-body" *ngIf="data">
-        <ul>
+        <ol>
             <li *ngFor="let query of queries | async as queries">
                 {{query.message}}
             </li>
-        </ul>
+        </ol>
     </div>
 </ng-template>
 <div class="card shadow-lg">
@@ -24,11 +24,10 @@
             </ng-container>
         </ng-container>
       </div>
-      <div class="align-items-end col-2">
-        <button class="btn btn-outline-primary" type="button" (click)="refresh()">Refresh Data</button>
-      </div>
-      <div class="col-2">
-          <button class="btn btn-secondary" type="button" (click)="open(content)">Show Queries</button>
+      <div class="align-items-end col-4">
+        <button class="btn btn-outline-primary me-2" type="button" (click)="refresh()">Refresh Data</button>
+          <button class="btn btn-secondary me-2" type="button" (click)="open(content)">Show Queries</button>
+          <a [routerLink]="['/customers/new']" class="btn btn-outline-secondary">New Customer</a>
       </div>
     </div>
     <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">

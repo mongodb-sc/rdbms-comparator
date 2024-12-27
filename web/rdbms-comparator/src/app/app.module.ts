@@ -12,6 +12,7 @@ import { CustomerSearchComponent } from './customer-search/customer-search.compo
 import { OrderSearchComponent } from './order-search/order-search.component';
 import { ReportsComponent } from './reports/reports.component';
 import {headersInterceptor} from "./headers.interceptor";
+import { CreateCustomerComponent } from './create-customer/create-customer.component';
 
 
 
@@ -21,6 +22,7 @@ import {headersInterceptor} from "./headers.interceptor";
     CustomerSearchComponent,
     OrderSearchComponent,
     ReportsComponent,
+    CreateCustomerComponent,
   ],
   imports: [
     CommonModule,

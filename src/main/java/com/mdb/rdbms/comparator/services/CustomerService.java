@@ -10,12 +10,15 @@ import jakarta.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.stat.SessionStatistics;
 import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -30,9 +33,6 @@ public class CustomerService {
     MeterRegistry registry;
 
     @Autowired
-    MongoClient mongoClient;
-
-    @Autowired
     EntityManager entityManager;
 
     @Autowired
@@ -42,14 +42,21 @@ public class CustomerService {
     AddressJpaRepository addressJpaRepo;
 
 
-    public Customer create(Customer customer) {
-
+    public Response<Customer> create(Customer customer) {
+        List<Metrics> metrics = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
         mongoRepo.save(customer);
+        metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         customer.set_id(null);
 
+        Session session = entityManager.unwrap(Session.class);
+        Statistics stats = session.getSessionFactory().getStatistics();
+        stats.clear();
         Address saveAddress = addressJpaRepo.save(customer.getAddress());
         customer.setAddress(saveAddress);
-        return custJpaRepo.save(customer);
+        Customer cust =  custJpaRepo.save(customer);
+        metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
+        return new Response<>(cust, metrics);
     }
 
 

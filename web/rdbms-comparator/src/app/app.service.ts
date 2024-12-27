@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {Customer} from "./models/customer";
+import {Response} from "./models/response";
 import {Order} from "./models/Order";
 import {Page} from "./models/page";
-import { environment } from "../environments/environment";
+import {environment} from "../environments/environment";
 import {Query} from "./models/Query";
 
 @Injectable({
@@ -14,6 +15,7 @@ export class AppService {
 
   useMongo : boolean = false;
   baseUrl:string = environment.baseUrl;
+
 
   constructor(private http: HttpClient) { }
 
@@ -34,6 +36,10 @@ export class AppService {
   getQueries(threadName:string, threadId:number, millis:number) :Observable<Query[]> {
     let params = new HttpParams().set('threadName', threadName).set('threadId', threadId).set('time', millis)
     return this.http.get<Query[]>(`${this.baseUrl}/api/queries`, {params:params});
+  }
+
+  createCustomer(formValues?: any):Observable<Response<Customer>> {
+    return this.http.post<Response<Customer>>(`${this.baseUrl}/api/customers`, formValues);
   }
 
 

@@ -88,7 +88,7 @@ export class OrderSearchComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.refresh();
+    //this.refresh();
 
   }
 
@@ -115,7 +115,7 @@ export class OrderSearchComponent implements OnInit{
   }
 
   resetForm() {
-    this.searchForm.reset(this.searchForm.value);
+    this.searchForm.reset();
   }
 
   open(content: TemplateRef<any>) {

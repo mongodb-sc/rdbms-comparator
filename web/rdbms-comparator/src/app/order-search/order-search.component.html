@@ -4,11 +4,11 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
     </div>
     <div class="offcanvas-body" *ngIf="data">
-        <ul >
+        <ol >
             <li *ngFor="let query of queries | async as queries">
                 {{query.message}}
             </li>
-        </ul>
+        </ol>
     </div>
 </ng-template>
 <div class="card">

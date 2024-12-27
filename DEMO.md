@@ -9,7 +9,7 @@ There are a few key concepts that the demo is designed to be able to highlight.
 
 - [Developer friendly nature of the document model when compared to RDBMS systems.](#developer-friendly-benefits-of-the-document-model-) 
 - [Performance advantages of removing unncessary joins](#performance-benefits)
-- Developer Data Platform benefits of having features like Atlas Search included
+- [Developer Data Platform benefits of having features like Atlas Search included]
 - Run anywhere. 
 
 ## How to show each differentiator

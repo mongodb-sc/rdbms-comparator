@@ -90,7 +90,7 @@ export class CustomerSearchComponent implements OnInit{
   }
 
   resetForm() {
-    this.searchForm.reset(this.searchForm.value);
+    this.searchForm.reset();
   }
 
   open(content: TemplateRef<any>) {
