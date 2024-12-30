@@ -218,7 +218,7 @@ The final key benefit for MongoDB is the ability to run anywhere, but to run any
 ### Additional Resources
 
 There is a recorded version of how to use the MongoLogistics tool to demo the differences. You can view it here [Josh Smith Demo Video](https://drive.google.com/file/d/1njXlVx3E8vukUteKWpsTuvBy7TT9kX7p/view?usp=drive_link)
-
+The deck used in the demo can be found here [Demo Deck](https://docs.google.com/presentation/d/1JAXjDMlUrH4IIpmhlOSK4NHA5Pz2TLaia1KF4Ewo6EQ/edit?usp=drive_link)
 
 
 
