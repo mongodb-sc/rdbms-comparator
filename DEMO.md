@@ -111,7 +111,27 @@ and save the address. Then, becuase of how Spring-Data (really Hibernate) works,
 Only then can we call `repository.save(customer)` to save the record to Postgres. 
 
 Once you have done this a few times, this will become intuitive, until you don't write this type of code again for a few months. Then you will make the same mistakes I did, and spend an extra hour or so
-re-factoring the relationships and code to make this work.  Yes, it can be done, and it's only 2 extra lines of code (and an extra class) but it's not **INTUITIVE** which means its slows down your developers. 
+re-factoring the relationships and code to make this work.  Yes, it can be done, and it's only 2 extra lines of code (and an extra class) but it's not **INTUITIVE** which means its slows down your developers.
+
+Creating a Order record (due to it's increased number of associated tables) is more complicated
+```java
+public Order create(Order order) {
+        // Lines to save Order in Mongo
+        mongoRepo.save(order);
+
+        // Lines to save Order in Postgres
+        for (OrderDetails details: order.getDetails()){
+            Product product = productJPARepository.findById(details.getProduct_id()).get();
+            details.setProduct(product);
+        }
+        order.setCustomer(customerJPARepository.findById(order.getCustomer_id()).get());
+        order.setStore(storeJPARepository.findById(order.getStore_id()).get());
+        order.setShippingAddress(addressJPARepository.findById(order.getShippingAddressId()).get());
+        return jpaRepo.save(order);
+
+    }
+
+```
 
 ### Performance Benefits
 
@@ -175,32 +195,31 @@ So they pay a performance cost on inserts as well as reads. In small scale syste
 You can repeat the same issued with the Orders page to see a more dramatic version. 
 
 
+### Run Anywhere
+
+The final key benefit for MongoDB is the ability to run anywhere, but to run anywhere CONSISTENTLY. Because it's the same underlying engine for the DB, you can be assured that your commands will function
+ the same way regardless of your deployment topology. By contrast here are the different ways of doing PostgresQL across the 3 major CSP's
+
+#### AWS Offering
+
+![image](img/aws_postgres.png)
+
+#### GCP Offerings
+
+![image](img/gcp_postgres.png)
+
+#### Azure Postgres
+
+![image](img/azure_postgres.png)
+
+
+
+
+### Additional Resources
+
+There is a recorded version of how to use the MongoLogistics tool to demo the differences. You can view it here [Josh Smith Demo Video](https://drive.google.com/file/d/1njXlVx3E8vukUteKWpsTuvBy7TT9kX7p/view?usp=drive_link)
 
 
 
 
 
-
-![image](img/screenshot.png)
-
-The purpose of the app (and this will hopefull evolve) is to highlight the challenges when dealing with complex data, and with large amounts of data
-when working in RDBMS platforms like postgres.
-There are 2 pages in the app, both accessible from the menu at the top
-- Customers
-- Orders
-
-Both pages follow the same basic premise. Allow the user to search for records by a wide array of fields and show the response.
-Once the search is completed in the header of the search box you will see response times displayed that show how long the search took and how many records it found.
-
-### Controlling the DB
-In the header bar you will see a toggle switch. This allows you to control which DB implementation is performing the retrieval. By default it uses Postgres, but can be switched
-to mongo by clicking on the slider.  To compare and contrast the options, simply click on the slider and then use either the "Refresh Data" or "Search" buttons in the search form.
-This will execute the exact same search, but using the other DB implementation.
-
-![image](img/toggle.png)
-
-
-On the orders page you will see an additional switch at the bottom of the search screen. This allows you to toggle between
-traditional MongoDB searches and Lucene based searches (which is why the demo requires the Atlas CLI). This can give you further contrast points with
-RDBMS solutions around how Atlas Search can benefit from index intersection.
-![image](img/lucene.png)

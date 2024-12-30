@@ -56,11 +56,10 @@ public class OrdersService {
 
 
     public Order create(Order order) {
-
+        // Lines to save Order in Mongo
         mongoRepo.save(order);
-        // How do we do the extended reference pattern correctly?
 
-
+        // Lines to save Order in Postgres
         for (OrderDetails details: order.getDetails()){
             Product product = productJPARepository.findById(details.getProduct_id()).get();
             details.setProduct(product);
