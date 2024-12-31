@@ -1,11 +1,13 @@
 package com.mdb.rdbms.comparator.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.BatchSize;
-import org.springframework.core.annotation.Order;
+
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -55,6 +57,10 @@ public class Customer {
     @OneToOne
     @JoinColumn(name="address_id")
     Address address;
+
+    @JsonIgnoreProperties({"customer"})
+    @Transient
+    private List<Order> recentOrders;
 
 
     public String getFirstName() {
@@ -119,5 +125,13 @@ public class Customer {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public List<Order> getRecentOrders() {
+        return recentOrders;
+    }
+
+    public void setRecentOrders(List<Order> recentOrders) {
+        this.recentOrders = recentOrders;
     }
 }

@@ -22,15 +22,13 @@ export class CustomerSearchComponent implements OnInit{
     elapsedLabel: '',
     loading:true
   }
-  tempRecords = 1000;
-  tempPage= 1;
-  tempPageSize= 100
   isCollapsed = false;
+  rowCollapsed: Array<boolean> = new Array<boolean>(100);
 
   searchForm: FormGroup;
 
   constructor(private service: AppService, private fb:FormBuilder, private offCanvasService: NgbOffcanvas) {
-
+    this.rowCollapsed.fill(true);
     this.searchForm = this.fb.group({
       firstName: [''],
       lastName: [''],

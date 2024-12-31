@@ -1,6 +1,7 @@
 import {Address} from "./address";
 import { Email } from "./Email";
 import {Phone} from "./Phone";
+import {Order} from "./Order";
 
 export interface Customer {
   firstName: string,
@@ -9,5 +10,5 @@ export interface Customer {
   address: Address,
   phones: Phone[];
   emails: Email[]
-
+  recentOrders:Order[]
 }
