@@ -62,6 +62,16 @@ public class Customer {
     @Transient
     private List<Order> recentOrders;
 
+    @Transient
+    private Meta meta;
+
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -133,5 +143,36 @@ public class Customer {
 
     public void setRecentOrders(List<Order> recentOrders) {
         this.recentOrders = recentOrders;
+    }
+
+
+    public class Meta {
+        private long count;
+        private double score;
+        private String token;
+
+        public long getCount() {
+            return count;
+        }
+
+        public void setCount(long count) {
+            this.count = count;
+        }
+
+        public double getScore() {
+            return score;
+        }
+
+        public void setScore(double score) {
+            this.score = score;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
     }
 }

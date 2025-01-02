@@ -15,7 +15,7 @@
           <a class="nav-link" [routerLink]="['/orders']">Orders</a>
         </li>
       </ul>
-      <div class="form-check form-switch px-3 text-white  form-select-lg">
+      <div class="form-check form-switch px-3 text-white form-select-lg">
         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" (change)="toggleDB()" [checked]="useMongo">
         <label class="form-check-label" for="flexSwitchCheckDefault" *ngIf="useMongo">MongoDB</label>
         <label class="form-check-label" for="flexSwitchCheckDefault" *ngIf="!useMongo">Postgres</label>

@@ -1,7 +1,7 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {AppService} from "../app.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Customer} from "../models/customer";
 import {Order} from "../models/Order";
 import {Address} from "../models/address";
@@ -27,11 +27,11 @@ export class OrderSearchComponent implements OnInit{
   isCollapsed = true;
   rowCollapsed: Array<boolean> = new Array<boolean>(100);
   searchForm: FormGroup;
-  useMongo:boolean;
+  useMongo:BehaviorSubject<boolean>
 
   constructor(private service:AppService, private fb:FormBuilder, private offCanvasService: NgbOffcanvas) {
     this.rowCollapsed.fill(true);
-    this.useMongo = this.service.useMongo;
+    this.useMongo = this.service.useMongoObservable;
 
     this.searchForm = this.fb.group({
       lucene:[false],

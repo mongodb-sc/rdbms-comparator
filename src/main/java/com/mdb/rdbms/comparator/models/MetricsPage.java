@@ -21,10 +21,24 @@ public class MetricsPage<T> extends PageImpl<T> {
 
     public MetricsPage(List<T> content, Pageable pageable, long total) {
         super(content, pageable, total);
+        this.threadName = Thread.currentThread().getName();
+        this.threadId = Thread.currentThread().getId();
+        this.millis = System.currentTimeMillis();
+    }
+
+    public MetricsPage(List<T> content, Pageable pageable, long total, double queriesIssued) {
+        super(content, pageable, total);
+        this.queriesIssued = queriesIssued;
+        this.threadName = Thread.currentThread().getName();
+        this.threadId = Thread.currentThread().getId();
+        this.millis = System.currentTimeMillis();
     }
 
     public MetricsPage(List<T> content) {
         super(content);
+        this.threadName = Thread.currentThread().getName();
+        this.threadId = Thread.currentThread().getId();
+        this.millis = System.currentTimeMillis();
     }
 
     public MetricsPage(Page<T> page, double queriesIssued) {

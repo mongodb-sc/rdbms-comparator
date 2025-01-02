@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdb.rdbms.comparator.models.Customer;
 import com.mdb.rdbms.comparator.models.CustomerSearch;
+import com.mdb.rdbms.comparator.models.MetricsPage;
 import com.mdb.rdbms.comparator.models.Response;
 import com.mdb.rdbms.comparator.services.CustomerService;
 import org.apache.logging.log4j.LogManager;
@@ -42,12 +43,18 @@ public class CustomerController {
 
     @PostMapping("search")
     public Page<Customer> getCustomers(@RequestParam(name = "db", required = false, defaultValue="pg") String db,
-                                       @RequestBody CustomerSearch customerSearch, @RequestParam(name="page", required = false, defaultValue = "0") int page ){
+                                       @RequestBody CustomerSearch customerSearch,
+                                       @RequestParam(name="page", required = false, defaultValue = "0") int page){
 
 
         return this.service.getCustomers(db, customerSearch, page);
-
     }
+
+    @GetMapping("search")
+    public MetricsPage<Customer> searchCustomers(@RequestParam("searchTerm") String searchTerm, @RequestParam(name="page", required = false, defaultValue = "0") int page) {
+        return this.service.searchCustomersSimple(searchTerm, page);
+    }
+
 
     @GetMapping("{id}")
     public Customer getCustomer(@PathVariable("id") Integer id,@RequestParam(name = "db", required = false, defaultValue="pg") String db ){

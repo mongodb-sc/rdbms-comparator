@@ -18,4 +18,20 @@ db.runCommand(
     }
 )
 
+db.runCommand(
+    {
+        createSearchIndexes: "customers",
+        indexes: [
+            {
+                name: "customer_search",
+                defintion: {
+                    mappings: {dynamic: true}
+                }
+            }
+        ]
+    }
+)
+
+
+
 

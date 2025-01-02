@@ -91,8 +91,6 @@ public class OrdersService {
     private Page<Order> mongoSearch(OrderSearch orderSearch, Pageable paging){
         HashMap<String, Object> params = new HashMap<>();
         Page<Order> result = null;
-        int skip = 0;
-        int limit = 100;
         double startCount = registry.counter("queries.issued").count();
         if (!orderSearch.isLucene()) {
            params = this.mongoQuery(params, orderSearch);
@@ -104,7 +102,7 @@ public class OrdersService {
                 query.add(Document.parse(jsonElement.toString()));
             }
             System.out.println(query.toString());
-            List<Order> searchResults = mongoRepo.searchOrdersLucene(query, skip, limit);
+            List<Order> searchResults = mongoRepo.searchOrdersLucene(query, paging.getPageNumber(), paging.getPageSize());
             long totalRecords = mongoRepo.count();
             result = new PageImpl<>(searchResults, paging, totalRecords);
         }

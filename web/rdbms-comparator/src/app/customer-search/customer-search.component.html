@@ -30,9 +30,23 @@
           <a [routerLink]="['/customers/new']" class="btn btn-outline-secondary">New Customer</a>
       </div>
     </div>
-    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-      <div class="row py-5">
-        <form [formGroup]="searchForm" (submit)="refresh()">
+      <div class="row" *ngIf="useMongo | async">
+          <div class="col-12 align-items-start">
+              <div class="form-check form-select-lg form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="searchForm" (change)="toggleSearch()">
+                  <label class="form-check-label" for="searchForm" *ngIf="showSimpleSearch">Complex Search</label>
+                  <label class="form-check-label" for="searchForm" *ngIf="showComplexSearch">Simple Search</label>
+              </div>
+          </div>
+      </div>
+    <form [formGroup]="searchForm" (submit)="refresh()">
+        <div class="row py-5" #collapse="ngbCollapse" [(ngbCollapse)]="showComplexSearch">
+            <div class="col form-group">
+                <label for="searchTerm">Search</label>
+                <input type="text" id="searchTerm" class="form-control"  aria-label="Title" formControlName="searchTerm">
+            </div>
+        </div>
+      <div class="row py-3" #collapse="ngbCollapse" [(ngbCollapse)]="showSimpleSearch">
           <div class="row g-3">
             <div class="col form-group">
               <label for="title">Title</label>
@@ -49,7 +63,7 @@
           </div>
           <div class="row g-3 py-2">
             <div class="col form-group">
-              <label for="street">Streeet</label>
+              <label for="street">Street</label>
               <input type="text" class="form-control"  aria-label="Street" formControlName="street" id="street">
             </div>
             <div class="col form-group">
@@ -97,16 +111,14 @@
               </div>
             </ng-container>
           </div>
-          <div class="row py-3">
-            <div class="col">
-              <button type="submit" class="btn btn-primary">Search</button>
-              <button type="submit" class="btn btn-outline-primary mx-3" (click)="resetForm()">Reset</button>
-            </div>
-          </div>
-        </form>
       </div>
-    </div>
-
+      <div class="row py-3">
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Search</button>
+          <button type="submit" class="btn btn-outline-primary mx-3" (click)="resetForm()">Reset</button>
+        </div>
+      </div>
+    </form>
   </div>
   <div class="card-body"  *ngIf="data && !elapsed.loading">
     <ngb-pagination *ngIf="data.totalElements"

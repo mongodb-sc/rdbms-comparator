@@ -1,6 +1,6 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {AppService} from "../app.service";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Customer} from "../models/customer";
 import {reportUnhandledError} from "rxjs/internal/util/reportUnhandledError";
 import {FormBuilder, FormGroup} from "@angular/forms";
@@ -22,14 +22,18 @@ export class CustomerSearchComponent implements OnInit{
     elapsedLabel: '',
     loading:true
   }
-  isCollapsed = false;
+  showSimpleSearch = false;
+  showComplexSearch =true;
   rowCollapsed: Array<boolean> = new Array<boolean>(100);
 
   searchForm: FormGroup;
+  useMongo:BehaviorSubject<boolean>;
 
   constructor(private service: AppService, private fb:FormBuilder, private offCanvasService: NgbOffcanvas) {
+    this.useMongo = this.service.useMongoObservable;
     this.rowCollapsed.fill(true);
     this.searchForm = this.fb.group({
+      searchTerm:[''],
       firstName: [''],
       lastName: [''],
       title: [''],
@@ -98,6 +102,11 @@ export class CustomerSearchComponent implements OnInit{
     this.offCanvasService.open(content, { position: 'bottom', ariaLabelledBy: 'offcanvas-basic-title' }).result.then(
     );
 
+  }
+
+  toggleSearch(){
+    this.showSimpleSearch = !this.showSimpleSearch;
+    this.showComplexSearch = !this.showComplexSearch;
   }
 
 

@@ -161,7 +161,7 @@
               <button type="submit" class="btn btn-primary">Search</button>
               <button type="submit" class="btn btn-outline-primary mx-3" (click)="resetForm()">Reset</button>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="useMongo | async">
               <div class="form-check form-select-lg form-switch px-3">
                 <input class="form-check-input" type="checkbox" role="switch" id="useLuceneSwitch" formControlName="lucene">
                 <label class="form-check-label" for="useLuceneSwitch" *ngIf="searchForm.controls['lucene'].value">Use Lucene</label>

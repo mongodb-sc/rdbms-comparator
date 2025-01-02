@@ -15,6 +15,15 @@ public class CustomerSearch {
     String zip;
     Phone phone;
     Email email;
+    boolean fuzzySearch;
+
+    public boolean isFuzzySearch() {
+        return fuzzySearch;
+    }
+
+    public void setFuzzySearch(boolean fuzzySearch) {
+        this.fuzzySearch = fuzzySearch;
+    }
 
     public String getDb() {
         return db;

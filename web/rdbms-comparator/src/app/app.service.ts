@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Customer} from "./models/customer";
 import {Response} from "./models/response";
 import {Order} from "./models/Order";
 import {Page} from "./models/page";
 import {environment} from "../environments/environment";
 import {Query} from "./models/Query";
+import {FormGroup} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +15,30 @@ import {Query} from "./models/Query";
 export class AppService {
 
   useMongo : boolean = false;
+  useMongoObservable: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   baseUrl:string = environment.baseUrl;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
 
   toggleDB(useMongo: boolean){
     this.useMongo = useMongo;
+    this.useMongoObservable.next(this.useMongo);
   }
 
 
   getAllCustomers(formValues?: any, newPage?:number) :Observable<Page<Customer[]>> {
-    return this.http.post<Page<Customer[]>>(`${this.baseUrl}/api/customers/search?db=${this.useMongo ? 'mongodb' : 'pg'}&page=${newPage ? newPage : 0}`, formValues);
+    let params = new HttpParams().set('db', this.useMongo ? 'mongodb' : 'pg').set('page', newPage ? newPage : 0)
+    if (formValues.searchTerm) {
+      params = params.set('searchTerm', formValues.searchTerm);
+      return this.http.get<Page<Customer[]>>(`${this.baseUrl}/api/customers/search`, {params:params});
+    } else {
+      return this.http.post<Page<Customer[]>>(`${this.baseUrl}/api/customers/search?`,formValues, {params:params});
+    }
+    
   }
 
   getAllOrders(formValues?:any, newPage?: number) :Observable<Page<Order[]>> {
