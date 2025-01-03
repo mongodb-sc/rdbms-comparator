@@ -21,6 +21,9 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.time.Instant;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
 
@@ -121,7 +124,6 @@ public class OrdersService {
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
         Page<Order> results = jpaRepo.findAll(orderSpec, paging);
-        System.out.println(stats.getQueryExecutionCount());
         return new MetricsPage<>(results, stats.getPrepareStatementCount());
     }
 
@@ -129,17 +131,25 @@ public class OrdersService {
         try {
             for (Field field : orderSearch.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                if (field.get(orderSearch) != null && (field.getType().equals(Address.class) || field.getType().equals(Customer.class) || field.getType().equals(Store.class))) {
-                    Object subObj = field.get(orderSearch);
-                    for (Field subField : subObj.getClass().getDeclaredFields()) {
-                        subField.setAccessible(true);
-                        if (subField.get(subObj) != null && !subField.get(subObj).toString().isEmpty()) {
-                            params.put(field.getName() + "." + subField.getName(), subField.get(subObj));
+                if (field.get(orderSearch) != null) {
+                    if ( field.getType().equals(Address.class) || field.getType().equals(Customer.class) || field.getType().equals(Store.class)) {
+                        Object subObj = field.get(orderSearch);
+                        for (Field subField : subObj.getClass().getDeclaredFields()) {
+                            subField.setAccessible(true);
+                            if (subField.get(subObj) != null && !subField.get(subObj).toString().isEmpty()) {
+                                params.put(field.getName() + "." + subField.getName(), subField.get(subObj));
+                            }
                         }
-                    }
-                } else {
-                    if (field.get(orderSearch) != null && !field.get(orderSearch).toString().isEmpty()) {
-                        params.put(field.getName(), field.get(orderSearch));
+                    } else if (field.getType().equals(Date.class)) {
+                        Instant date = ((Date) field.get(orderSearch)).toInstant();
+                        HashMap<String, Object> subParams = new HashMap();
+                        subParams.put("$gte", new Date(date.truncatedTo(ChronoUnit.DAYS).toEpochMilli()));
+                        subParams.put("$lte", new Date(date.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS).toEpochMilli()));
+                        params.put(field.getName(), subParams);
+                    } else {
+                        if (!field.get(orderSearch).toString().isEmpty()) {
+                            params.put(field.getName(), field.get(orderSearch));
+                        }
                     }
                 }
             }

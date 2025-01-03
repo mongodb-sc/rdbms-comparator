@@ -38,7 +38,18 @@
           <div class="row g-3 py-2">
             <div class="col form-group">
               <label for="orderDate">Order Date</label>
-              <input type="text" class="form-control" aria-label="orderDate" id="orderDate" formControlName="orderDate">
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            id="orderDate"
+                            formControlName="orderDate"
+                            ngbDatepicker
+                            #orderDate="ngbDatepicker"
+                    />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="orderDate.toggle()" type="button"></button>
+                </div>
             </div>
             <div class="col form-group">
               <label for="zip">Zip Code</label>
@@ -50,7 +61,18 @@
             </div>
             <div class="col form-group">
               <label for="invoiceDate">Invoice Date</label>
-              <input type="text" class="form-control" id="invoiceDate" aria-label="invoiceDate" formControlName="invoiceDate">
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            id="invoiceDate"
+                            formControlName="invoiceDate"
+                            ngbDatepicker
+                            #invoiceDate="ngbDatepicker"
+                    />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="invoiceDate.toggle()" type="button"></button>
+                </div>
             </div>
             <div class="col form-group">
               <label for="invoiceId">Invoice Id</label>
@@ -60,7 +82,18 @@
           <div class="row g-3 py-2">
             <div class="col form-group">
               <label for="fillDate">Fill Date</label>
-              <input type="text" class="form-control" id="fillDate" aria-label="fillDate" formControlName="fillDate">
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            id="fillDate"
+                            formControlName="fillDate"
+                            ngbDatepicker
+                            #fillDate="ngbDatepicker"
+                    />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="fillDate.toggle()" type="button"></button>
+                </div>
             </div>
             <div class="col form-group">
               <label for="deliveryMethod">Delivery Method</label>
@@ -76,7 +109,18 @@
             </div>
             <div class="col form-group">
               <label for="pickDate">Pick Date</label>
-              <input type="text" class="form-control" id="pickDate" aria-label="invoiceId" formControlName="pickDate">
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            id="pickDate"
+                            formControlName="pickDate"
+                            ngbDatepicker
+                            #pickDate="ngbDatepicker"
+                    />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="pickDate.toggle()" type="button"></button>
+                </div>
             </div>
           </div>
           <div class="row g-3 py-2">
@@ -98,7 +142,18 @@
             </div>
             <div class="col form-group">
               <label for="deliveryDate">Delivery Date</label>
-              <input type="text" class="form-control" id="deliveryDate" aria-label="invoiceId" formControlName="deliveryDate">
+                <div class="input-group">
+                    <input
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            id="deliveryDate"
+                            formControlName="deliveryDate"
+                            ngbDatepicker
+                            #deliveryDate="ngbDatepicker"
+                    />
+                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="deliveryDate.toggle()" type="button"></button>
+                </div>
             </div>
           </div>
           <div class="row g-3 py-2">

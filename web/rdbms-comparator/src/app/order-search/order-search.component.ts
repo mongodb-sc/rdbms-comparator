@@ -6,13 +6,19 @@ import {Customer} from "../models/customer";
 import {Order} from "../models/Order";
 import {Address} from "../models/address";
 import {Page} from "../models/page";
-import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
+import {NgbDateAdapter, NgbDateParserFormatter, NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {Query} from "../models/Query";
+import {CustomDateParserFormatter} from "../CustomDateParserFormatter";
+import {CustomDateAdapter} from "../CustomDateAdapter";
 
 @Component({
   selector: 'app-order-search',
   templateUrl: './order-search.component.html',
-  styleUrl: './order-search.component.sass'
+  styleUrl: './order-search.component.sass',
+  providers: [
+    {provide: NgbDateAdapter, useClass:CustomDateAdapter},
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
+  ]
 })
 export class OrderSearchComponent implements OnInit{
 

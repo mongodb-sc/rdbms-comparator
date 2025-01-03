@@ -7,6 +7,9 @@ import com.mdb.rdbms.comparator.models.OrderSearch;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.Instant;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +27,9 @@ public class OrderSpecification implements Specification<Order> {
         List<Predicate> predicates = new ArrayList<>();
 
         if (orderSearch.getOrderDate() != null) {
-            predicates.add(cb.equal(root.get("orderDate"), orderSearch.getOrderDate()));
+            Instant instant = orderSearch.getOrderDate().toInstant();
+            predicates.add(cb.greaterThanOrEqualTo(root.get("orderDate").as(Instant.class), instant.minus(Period.ofDays(1)).truncatedTo(ChronoUnit.DAYS)));
+            predicates.add(cb.lessThanOrEqualTo(root.get("orderDate").as(Instant.class), instant.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS)));
         }
         if (orderSearch.getId() != null) {
             System.out.println("Looklup by ID got called");
@@ -34,13 +39,18 @@ public class OrderSpecification implements Specification<Order> {
             predicates.add(cb.equal(root.get("purchaseOrder"), orderSearch.getPurchaseOrder()));
         }
         if (orderSearch.getInvoiceDate() != null) {
-            predicates.add(cb.equal(root.get("invoiceDate"), orderSearch.getInvoiceDate()));
+            Instant instant = orderSearch.getInvoiceDate().toInstant();
+            predicates.add(cb.greaterThanOrEqualTo(root.get("invoiceDate").as(Instant.class), instant.minus(Period.ofDays(1)).truncatedTo(ChronoUnit.DAYS)));
+            predicates.add(cb.lessThanOrEqualTo(root.get("invoiceDate").as(Instant.class), instant.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS)));
+
         }
         if (orderSearch.getInvoiceId() != null) {
             predicates.add(cb.equal(root.get("invoiceId"), orderSearch.getInvoiceId()));
         }
         if (orderSearch.getFillDate() != null) {
-            predicates.add(cb.equal(root.get("fillDate"), orderSearch.getFillDate()));
+            Instant instant = orderSearch.getFillDate().toInstant();
+            predicates.add(cb.greaterThanOrEqualTo(root.get("fillDate").as(Instant.class), instant.minus(Period.ofDays(1)).truncatedTo(ChronoUnit.DAYS)));
+            predicates.add(cb.lessThanOrEqualTo(root.get("fillDate").as(Instant.class), instant.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS)));
         }
         if (!orderSearch.getDeliveryMethod().isEmpty()) {
             predicates.add(cb.equal(root.get("deliveryMethod"), orderSearch.getDeliveryMethod()));
@@ -52,7 +62,9 @@ public class OrderSpecification implements Specification<Order> {
             predicates.add(cb.equal(root.get("totalPieces"), orderSearch.getTotalPieces()));
         }
         if (orderSearch.getPickDate() != null) {
-            predicates.add(cb.equal(root.get("pickDate"), orderSearch.getPickDate()));
+            Instant instant = orderSearch.getPickDate().toInstant();
+            predicates.add(cb.greaterThanOrEqualTo(root.get("pickDate").as(Instant.class), instant.minus(Period.ofDays(1)).truncatedTo(ChronoUnit.DAYS)));
+            predicates.add(cb.lessThanOrEqualTo(root.get("pickDate").as(Instant.class), instant.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS)));
         }
         if (!orderSearch.getShippingMethod().isEmpty()) {
             predicates.add(cb.equal(root.get("shippingMethod"), orderSearch.getShippingMethod()));
@@ -67,7 +79,9 @@ public class OrderSpecification implements Specification<Order> {
             predicates.add(cb.equal(root.get("shippingStatus"), orderSearch.getShippingStatus()));
         }
         if (orderSearch.getDeliveryDate() != null) {
-            predicates.add(cb.equal(root.get("deliveryDate"), orderSearch.getDeliveryDate()));
+            Instant instant = orderSearch.getDeliveryDate().toInstant();
+            predicates.add(cb.greaterThanOrEqualTo(root.get("deliveryDate").as(Instant.class), instant.minus(Period.ofDays(1)).truncatedTo(ChronoUnit.DAYS)));
+            predicates.add(cb.lessThanOrEqualTo(root.get("deliveryDate").as(Instant.class), instant.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS)));
         }
         if (orderSearch.getOrderType() != null) {
             predicates.add(cb.equal(root.get("orderType"), orderSearch.getOrderType()));
