@@ -7,6 +7,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Page} from "../models/page";
 import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {Query} from "../models/Query";
+import {Order} from "../models/Order";
+import {Response} from "../models/response";
 
 @Component({
   selector: 'app-customer-search',
@@ -16,7 +18,8 @@ import {Query} from "../models/Query";
 export class CustomerSearchComponent implements OnInit{
 
   data?: Page<Customer[]>;
-  queries?: Observable<Query[]>
+  queries?: Observable<Query[]>;
+  recent?: Observable<Response<Order[]>>;
   elapsed = {
     duration:  0,
     elapsedLabel: '',
@@ -107,6 +110,15 @@ export class CustomerSearchComponent implements OnInit{
   toggleSearch(){
     this.showSimpleSearch = !this.showSimpleSearch;
     this.showComplexSearch = !this.showComplexSearch;
+  }
+
+  collapseRow(index: number, customerId: number){
+    this.rowCollapsed[index] = !this.rowCollapsed[index]
+    console.log(`Calling the DB for the recent transactions with index ${index}`)
+    if (!this.rowCollapsed[index]) { // only call if they are opening the row, not on closing
+      this.recent = this.service.getRecentOrders(customerId);
+    }
+
   }
 
 

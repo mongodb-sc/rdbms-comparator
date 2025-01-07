@@ -54,6 +54,12 @@ export class AppService {
     return this.http.post<Response<Customer>>(`${this.baseUrl}/api/customers`, formValues);
   }
 
+  getRecentOrders(customerId: number){
+    let params = new HttpParams().set('customerId', customerId)
+    console.log('The service got called');
+    return this.http.get<Response<Order[]>>(`${this.baseUrl}/api/orders/recent`, {params: params})
+  }
+
 
 
 

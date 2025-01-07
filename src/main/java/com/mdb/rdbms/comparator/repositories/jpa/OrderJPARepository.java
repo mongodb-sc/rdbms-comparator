@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,5 +18,7 @@ import java.util.List;
 public interface OrderJPARepository extends JpaRepository<Order, Integer>, JpaSpecificationExecutor<Order> {
 
 
+    @Query("Select o from Order o where o.customer.id = :customerId order by o.orderDate desc limit 5")
+    List<Order> findByCustomerId(@Param("customerId") Integer customerId);
 
 }

@@ -81,6 +81,19 @@ public class OrdersService {
     }
 
 
+    public Response<List<Order>> getRecentOrders(String db, int customerId) {
+        List<Metrics> metrics = new ArrayList<>();
+        Session session = entityManager.unwrap(Session.class);
+        Statistics stats = session.getSessionFactory().getStatistics();
+        stats.clear();
+        List<Order> recentOrders = jpaRepo.findByCustomerId(customerId);
+        for (Order order: recentOrders){
+            order.setDetails(null);
+        }
+        metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
+        return new Response<>(recentOrders, metrics);
+    }
+
     public Page<Order> getAllOrders(String db, OrderSearch orderSearch, int page){
         Pageable paging = PageRequest.of(page, 100);
         if (db.equals("mongodb")) {

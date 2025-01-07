@@ -243,6 +243,7 @@
     <table class="table table-hover">
       <thead>
       <tr>
+          <th scope="col"></th>
         <th scope="col">Order Date</th>
         <th scope="col">Customer</th>
         <th scope="col">Id</th>
@@ -257,6 +258,7 @@
       <tbody>
       <ng-container *ngFor="let order of data.content, let  i = index">
         <tr (click)="rowCollapsed[i] = !rowCollapsed[i]">
+          <td><i [ngClass]=" rowCollapsed[i] ? 'bi bi-caret-down' : 'bi bi-caret-up'"></i></td>
           <td>{{ order.orderDate | date: 'short' }}</td>
           <td>{{ order.customer.title }} {{ order.customer.firstName }} {{ order.customer.lastName }}</td>
           <td>{{ order.id }}</td>
@@ -269,7 +271,7 @@
         </tr>
         <ng-container *ngIf="order.details">
           <tr [ngClass]="{'hide-row' : rowCollapsed[i]}">
-            <td colspan="9">
+            <td colspan="10">
               <div class="accordion accordion-item" [ngbCollapse]="rowCollapsed[i]">
                 <table class="table table-borderless table-group-divider">
                   <thead>

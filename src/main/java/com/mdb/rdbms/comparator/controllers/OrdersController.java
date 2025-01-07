@@ -1,9 +1,8 @@
 package com.mdb.rdbms.comparator.controllers;
 
-import com.mdb.rdbms.comparator.models.Customer;
 import com.mdb.rdbms.comparator.models.Order;
 import com.mdb.rdbms.comparator.models.OrderSearch;
-import com.mdb.rdbms.comparator.services.CustomerService;
+import com.mdb.rdbms.comparator.models.Response;
 import com.mdb.rdbms.comparator.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +38,12 @@ public class OrdersController {
     public Page<Order> getAllOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestParam(name="page", required = false, defaultValue = "0") int page){
         return this.service.getAllOrders(db, null, page);
     }
+
+    @GetMapping("recent")
+    public Response<List<Order>> getRecentOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestParam(name="customerId") int customerId){
+        return this.service.getRecentOrders(db, customerId);
+    }
+
 
     @PostMapping("search")
     public Page<Order> getOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestBody OrderSearch orderSearch, @RequestParam(name="page", required = false, defaultValue = "0") int page){

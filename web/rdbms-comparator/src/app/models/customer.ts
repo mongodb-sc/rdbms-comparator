@@ -11,4 +11,5 @@ export interface Customer {
   phones: Phone[];
   emails: Email[]
   recentOrders:Order[]
+  id: number;
 }

@@ -31,5 +31,5 @@ out/
 
 ### Angular
 
-!**/.angular/
+web/rdbms-comparator/.angular/cache/**
 

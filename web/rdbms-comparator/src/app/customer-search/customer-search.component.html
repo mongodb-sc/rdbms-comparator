@@ -132,62 +132,78 @@
     </ngb-pagination>
     <table class="table table-hover">
       <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Street</th>
-        <th scope="col">City</th>
-        <th scope="col">State</th>
-        <th scope="col">Zip</th>
-        <th scope="col">Phones</th>
-        <th scope="col">Emails</th>
-      </tr>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Name</th>
+            <th scope="col">Street</th>
+            <th scope="col">City</th>
+            <th scope="col">State</th>
+            <th scope="col">Zip</th>
+            <th scope="col">Phones</th>
+            <th scope="col">Emails</th>
+        </tr>
       </thead>
       <tbody>
-      <ng-container *ngFor="let customer of data.content, let  i = index">
-          <tr (click)="rowCollapsed[i] = !rowCollapsed[i]">
-            <td>{{ customer.title }} {{ customer.firstName }} {{ customer.lastName }}</td>
-            <td>{{ customer.address.street }}</td>
-            <td>{{ customer.address.city }}</td>
-            <td>{{ customer.address.state }}</td>
-            <td>{{ customer.address.zip }}</td>
-            <td>
-              <p *ngFor="let phone of customer.phones">{{phone.type}}: {{phone.number}}
-            </td>
-            <td>
-              <p *ngFor="let email of customer.emails">{{email.type}}: {{email.email}}
-            </td>
-          </tr>
-          <ng-container *ngIf="customer.recentOrders">
+          <ng-container *ngFor="let customer of data.content, let  i = index">
+              <tr (click)="collapseRow(i, customer.id)">
+                <td><i [ngClass]=" rowCollapsed[i] ? 'bi bi-caret-down' : 'bi bi-caret-up'"></i></td>
+                <td>{{ customer.title }} {{ customer.firstName }} {{ customer.lastName }}</td>
+                <td>{{ customer.address.street }}</td>
+                <td>{{ customer.address.city }}</td>
+                <td>{{ customer.address.state }}</td>
+                <td>{{ customer.address.zip }}</td>
+                <td>
+                  <p *ngFor="let phone of customer.phones">{{phone.type}}: {{phone.number}}
+                </td>
+                <td>
+                  <p *ngFor="let email of customer.emails">{{email.type}}: {{email.email}}
+                </td>
+              </tr>
               <tr [ngClass]="{'hide-row' : rowCollapsed[i]}">
-                  <td colspan="7">
-                      <div class="accordion accordion-item" [ngbCollapse]="rowCollapsed[i]">
-                          <div class="card"  *ngFor="let order of customer.recentOrders">
-                              <span>Order Date: {{order.orderDate | date: 'short'}}</span>
-                              <span>Order Id: {{order.id }}</span>
-                              <table class="table table-borderless table-group-divider">
-                                  <thead>
-                                  <tr>
-                                      <th scope="col">Quantity</th>
-                                      <th scope="col">Product Id</th>
-                                      <th scope="col">Product Name</th>
-                                      <th scope="col">Description</th>
-                                  </tr>
-                                  </thead>
-                                  <tbody>
-                                  <tr *ngFor="let detail of order.details">
-                                      <td>{{ detail.quantity}}</td>
-                                      <td>{{ detail.product.id}}</td>
-                                      <td>{{ detail.product.name}}</td>
-                                      <td>{{ detail.product.description}}</td>
-                                  </tr>
-                                  </tbody>
-                              </table>
+                  <ng-container *ngIf="!rowCollapsed[i]">
+                      <td colspan="8">
+                          <div class="accordion accordion-item" [ngbCollapse]="rowCollapsed[i]">
+                              <div class="card"  >
+                                  <table class="table table-borderless table-group-divider">
+                                      <thead>
+                                      <tr>
+                                          <th scope="col">Order Date</th>
+                                          <th scope="col">Total Pieces</th>
+                                          <th scope="col">Order Status</th>
+                                          <th scope="col">Total</th>
+                                          <th scope="col">Shipped Date</th>
+                                      </tr>
+                                      </thead>
+                                      <tbody>
+                                      @if (useMongo | async) {
+                                          <ng-container *ngIf="customer.recentOrders">
+                                              <tr *ngFor="let order of customer.recentOrders">
+                                                  <td>{{ order.orderDate | date: 'short'}}</td>
+                                                  <td>{{ order.totalPieces}}</td>
+                                                  <td>{{ order.orderStatus}}</td>
+                                                  <td>{{ order.total | currency}}</td>
+                                                  <td>{{ order.deliveryDate | date: 'short'}}</td>
+                                              </tr>
+                                          </ng-container>
+                                      } @else {
+                                          <ng-container *ngIf="recent | async as recent">
+                                              <tr *ngFor="let order of recent.content">
+                                                  <td>{{ order.orderDate | date: 'short'}}</td>
+                                                  <td>{{ order.totalPieces}}</td>
+                                                  <td>{{ order.orderStatus}}</td>
+                                                  <td>{{ order.total | currency}}</td>
+                                                  <td>{{ order.deliveryDate | date: 'short'}}</td>
+                                              </tr>
+                                          </ng-container>
+                                      }
+                                      </tbody>
+                                  </table>
+                              </div>
                           </div>
-                      </div>
-                  </td>
+                      </td>
+                  </ng-container>
               </tr>
           </ng-container>
-      </ng-container>
       </tbody>
     </table>
   </div>
