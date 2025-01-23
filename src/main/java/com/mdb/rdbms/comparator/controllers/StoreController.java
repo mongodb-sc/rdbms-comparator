@@ -30,4 +30,9 @@ public class StoreController {
         return this.service.getAllStores(db);
     }
 
+    @GetMapping("search")
+    public List<Store> searchStores(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestParam("searchTerm") String searchTerm){
+        return this.service.searchStores(db, searchTerm);
+    }
+
 }

@@ -1,0 +1,89 @@
+<div class="card shadow-lg">
+    <form [formGroup]="orderForm" (submit)="save()">
+    <div class="card-header">
+        <h3 class="card-title">Place New Order</h3>
+    </div>
+    <div class="card-body">
+
+            <div class="row g-3">
+                <div class="col form-group">
+                    <label for="purchaseOrder">Purchase Order #</label>
+                    <input type="text" id="purchaseOrder" class="form-control"  aria-label="Title" formControlName="purchaseOrder">
+                </div>
+                <div class="col form-group">
+                    <label for="customer">Customer</label>
+                    <input type="text" class="form-control"  aria-label="Customer" formControlName="customer_id" id="customer">
+                </div>
+                <div class="col form-group">
+                    <label for="store">Store</label>
+                    <input type="text" id="store" class="form-control" [ngbTypeahead]="storeSearch" [selectOnExact]="true" [resultFormatter]="storeFormatter" [inputFormatter]="inputFormatter" formControlName="store_id"/>
+                </div>
+
+            </div>
+            <div class="row g-3 py-2">
+                <div class="col">
+                    <h4>Order Items</h4>
+                    <ng-container formArrayName="details">
+                        <ng-container *ngFor="let item of details.controls; index as i">
+                            <div class="row" [formGroupName]="i">
+                                <div class="col form-group">
+                                    <label for="product">Product</label>
+                                    <input type="text" id="product" class="form-control" [ngbTypeahead]="productSearch" [selectOnExact]="true" [resultFormatter]="productFormatter" [inputFormatter]="inputFormatter" formControlName="product_id"/>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="text" class="form-control"  aria-label="phone.number" formControlName="quantity" id="quantity">
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <span class="badge rounded-pill text-bg-primary" (click)="addItem()">+</span>
+                </div>
+            </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary" [disabled]="!orderForm.valid">Place Order</button>
+    </div>
+</form>
+</div>
+
+<div class="alert alert-success mt-5" role="alert" *ngIf="order">
+    The customer was successfully created.
+    <ng-container>
+        <ul>
+            <li  *ngFor="let metric of order.metrics"><span>DB: {{metric.db}}:  Elapsed time of: {{metric.elapsedTime}} ms with queries issued: {{metric.queriesIssued}}</span></li>
+        </ul>
+        <div>
+            <button type="button" class="btn btn-secondary" (click)="open(content)">Show Queries</button>
+        </div>
+    </ng-container>
+</div>
+<ng-template #content let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvas-basic-title">Queries Executed</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body" *ngIf="order">
+        <div class="row">
+            <div class="col-6 text-wrap">
+                <ol>
+                    @for(query of queries | async; track queries){
+                        @if (query.loggerName.includes('SQL')) {
+                            <li class="queries-text-wrap">{{query.message}}</li>
+                        }
+                    }
+                </ol>
+            </div>
+            <div class="col-6 text-wrap">
+                <ol>
+                    @for(query of queries | async; track queries){
+                        @if (query.loggerName.includes('MongoDB')) {
+                            <li class="queries-text-wrap">{{query.message}}</li>
+                        }
+                    }
+                </ol>
+            </div>
+        </div>
+    </div>
+
+</ng-template>

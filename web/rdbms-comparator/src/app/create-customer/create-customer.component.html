@@ -112,12 +112,26 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
     </div>
     <div class="offcanvas-body" *ngIf="customer">
-        <ol>
-            <li *ngFor="let query of queries | async as queries">
-                {{query.message}}
-            </li>
-        </ol>
-
+        <div class="row">
+            <div class="col-6 text-wrap">
+                <ol>
+                    @for(query of queries | async; track queries){
+                        @if (query.loggerName.includes('SQL')) {
+                            <li class="queries-text-wrap">{{query.message}}</li>
+                        }
+                    }
+                </ol>
+            </div>
+            <div class="col-6 text-wrap">
+                <ol>
+                    @for(query of queries | async; track queries){
+                        @if (query.loggerName.includes('MongoDB')) {
+                            <li class="queries-text-wrap">{{query.message}}</li>
+                        }
+                    }
+                </ol>
+            </div>
+        </div>
     </div>
 
 </ng-template>

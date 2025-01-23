@@ -43,7 +43,7 @@ public class OrdersService {
     ProductJPARepository productJPARepository;
 
     @Autowired
-    CustomerJPARepository customerJPARepository;
+    CustomerService customerService;
 
     @Autowired
     StoreJPARepository storeJPARepository;
@@ -58,20 +58,33 @@ public class OrdersService {
     MeterRegistry registry;
 
 
-    public Order create(Order order) {
+    public Response<Order> create(Order order) {
         // Lines to save Order in Mongo
-        mongoRepo.save(order);
+        Customer customer = customerService.getCustomerById(order.getCustomer_id(), "pg");
 
+        List<Metrics> metrics = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
+        order.setCustomer(customer);
+        mongoRepo.save(order);
+        metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         // Lines to save Order in Postgres
+
+
+        Session session = entityManager.unwrap(Session.class);
+        Statistics stats = session.getSessionFactory().getStatistics();
+        stats.clear();
         for (OrderDetails details: order.getDetails()){
             Product product = productJPARepository.findById(details.getProduct_id()).get();
             details.setProduct(product);
         }
-        order.setCustomer(customerJPARepository.findById(order.getCustomer_id()).get());
-        order.setStore(storeJPARepository.findById(order.getStore_id()).get());
-        order.setShippingAddress(addressJPARepository.findById(order.getShippingAddressId()).get());
-        return jpaRepo.save(order);
 
+        order.setCustomer(customer);
+        order.setStore(storeJPARepository.findById(order.getStore_id()).get());
+        order.setShippingAddress(customer.getAddress());
+        Order pgOrder = jpaRepo.save(order);
+        metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
+        return new Response<>(pgOrder, metrics);
+ 
     }
 
     public List<Order> createBatch(List<Order> orders){

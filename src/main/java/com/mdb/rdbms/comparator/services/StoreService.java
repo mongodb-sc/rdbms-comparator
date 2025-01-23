@@ -41,6 +41,14 @@ public class StoreService {
         }
     }
 
+    public List<Store> searchStores(String db, String keyword){
+        if (db.equals("mongodb")) {
+            return mongoRepo.searchStores(keyword);
+        } else {
+            return jpaRepo.findByNameStartingWith(keyword);
+        }
+    }
+
 
 
 }

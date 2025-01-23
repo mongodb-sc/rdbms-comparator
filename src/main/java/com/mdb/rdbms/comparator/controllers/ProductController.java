@@ -28,4 +28,9 @@ public class ProductController {
     public List<Product> getProducts(@RequestParam(required = false, defaultValue = "pg") String db) {
         return service.getAllProducts(db);
     }
+
+    @GetMapping("search")
+    public List<Product> searchProducts(@RequestParam(name = "db", required=false, defaultValue="pg") String db, @RequestParam("searchTerm") String searchTerm) {
+        return service.searchProducts(db, searchTerm);
+    }
 }

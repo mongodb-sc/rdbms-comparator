@@ -34,6 +34,14 @@ public class ProductService {
         }
     }
 
+    public List<Product> searchProducts(String db, String searchTerm) {
+        if (db.equals("mongodb")) {
+            return mongoRepo.searchProducts(searchTerm);
+        } else {
+            return jpaRepo.findByNameStartingWith(searchTerm);
+        }
+    }
+
 
 
 }

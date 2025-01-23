@@ -8,6 +8,8 @@ import {Page} from "./models/page";
 import {environment} from "../environments/environment";
 import {Query} from "./models/Query";
 import {FormGroup} from "@angular/forms";
+import {Product} from "./models/order_detail";
+import {Store} from "./models/store";
 
 @Injectable({
   providedIn: 'root'
@@ -54,10 +56,27 @@ export class AppService {
     return this.http.post<Response<Customer>>(`${this.baseUrl}/api/customers`, formValues);
   }
 
+  createOrder(formValues?: any):Observable<Response<Order>> {
+    for (let detail of formValues.details){
+      detail.product_id = detail.product_id.id
+    }
+    formValues.store_id = formValues.store_id.id
+    return this.http.post<Response<Order>>(`${this.baseUrl}/api/orders`, formValues);
+  }
+
   getRecentOrders(customerId: number){
     let params = new HttpParams().set('customerId', customerId)
-    console.log('The service got called');
     return this.http.get<Response<Order[]>>(`${this.baseUrl}/api/orders/recent`, {params: params})
+  }
+
+  getProductList(searchTerm: string): Observable<Product[]> {
+    let params = new HttpParams().set('searchTerm', searchTerm).set('db',this.useMongo ? 'mongodb' : 'pg' )
+    return this.http.get<Product[]>(`${this.baseUrl}/api/products/search`, {params: params});
+  }
+
+  getStores(searchTerm: string): Observable<Store[]> {
+    let params = new HttpParams().set('searchTerm', searchTerm).set('db',this.useMongo ? 'mongodb' : 'pg' )
+    return this.http.get<Store[]>(`${this.baseUrl}/api/stores/search`, {params: params});
   }
 
 

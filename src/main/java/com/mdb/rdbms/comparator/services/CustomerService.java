@@ -111,7 +111,7 @@ public class CustomerService {
 
     public Customer getCustomerById(Integer id, String db){
         if(db.equals("mongodb")) {
-            return mongoRepo.findById(id).get();
+            return mongoRepo.findCustomerByPgId(id);
         } else {
             return custJpaRepo.findById(id).get();
         }

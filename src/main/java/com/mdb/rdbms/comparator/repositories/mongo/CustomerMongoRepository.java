@@ -19,7 +19,8 @@ public interface CustomerMongoRepository extends MongoRepository<Customer, Integ
     @Query(value="?0", sort = "{'firstName': -1, 'lastName': 1, 'address.city':  1}")
     Page<Customer> sortCustomers(HashMap<String, Object> params, Pageable paging);
 
-
+    @Query(value="{'pg_id':  ?0}")
+    Customer findCustomerByPgId(Integer id);
 
 
     @Aggregation(pipeline= {"{'$search': {index:'customer_search', count: {type: 'total'},text:{ query:?0, fuzzy:{},path:['lastName','firstName','address.city','address.state','address.zip','phones.number','emails.email']}}}",
