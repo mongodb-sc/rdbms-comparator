@@ -64,7 +64,6 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="customer_id", referencedColumnName = "id")
-    @DocumentReference
     Customer customer;
 
 
