@@ -11,6 +11,7 @@ services:
       - mongodb_svc
     environment:
       POSTGRES_URI: jdbc:postgresql://pg_host:5432/rdbms
+      MONGODB_LOGGING_URI: mongodb://yoda:starwars@mdb_host:27017/rdbms.logs?directConnection=true&authSource=admin
       MONGODB_URI: mongodb://yoda:starwars@mdb_host:27017/?replicaSet=mongodb
 
   postgres:
