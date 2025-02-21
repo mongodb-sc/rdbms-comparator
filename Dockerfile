@@ -5,7 +5,7 @@ COPY web/rdbms-comparator /usr/src/app/
 WORKDIR /usr/src/app
 RUN npm install -g @angular/cli
 RUN npm install
-RUN ng build -c docker
+RUN ng build -c production
 
 
 
