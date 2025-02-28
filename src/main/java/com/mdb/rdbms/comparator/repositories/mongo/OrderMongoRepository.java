@@ -22,7 +22,7 @@ public interface OrderMongoRepository extends MongoRepository<Order, Integer> {
     @Query(value="{'details.product_id': ?0}")
     List<Order> findOrdersByProductId(Integer product_id);
 
-    @Query(value="?0", sort = "{'orderDate': -1, 'orderStats': 1, 'customer.lastName':  1}", fields = "{'customer.address': 0, 'customer.phones': 0, 'customers.emails': 0}")
+    @Query(value="?0", sort = "{'orderDate': -1, 'orderStatus': 1, 'customer.lastName':  1}", fields = "{'customer.address': 0, 'customer.phones': 0, 'customers.emails': 0}")
     Page<Order> searchOrders(HashMap<String, Object> params, Pageable paging);
 
 
