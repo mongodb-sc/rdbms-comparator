@@ -4,12 +4,13 @@ import {Phone} from "./Phone";
 import {Order} from "./Order";
 
 export interface Customer {
-  firstName: string,
-  lastName: string,
-  title: string,
-  address: Address,
-  phones: Phone[];
-  emails: Email[]
-  recentOrders:Order[]
+  firstName?: string,
+  lastName?: string,
+  title?: string,
+  address?: Address,
+  phones?: Phone[];
+  emails?: Email[]
+  recentOrders?:Order[]
   id: number;
+  pg_id?:number;
 }

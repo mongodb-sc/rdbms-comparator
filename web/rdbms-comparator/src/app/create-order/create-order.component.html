@@ -12,11 +12,11 @@
                 </div>
                 <div class="col form-group">
                     <label for="customer">Customer</label>
-                    <input type="text" class="form-control"  aria-label="Customer" formControlName="customer_id" id="customer">
+                    <input type="text" id="customer" class="form-control" [ngbTypeahead]="customerSearch" [selectOnExact]="true" [resultFormatter]="customerFormatter" [inputFormatter]="customerFormatter" formControlName="customer"/>
                 </div>
                 <div class="col form-group">
                     <label for="store">Store</label>
-                    <input type="text" id="store" class="form-control" [ngbTypeahead]="storeSearch" [selectOnExact]="true" [resultFormatter]="storeFormatter" [inputFormatter]="inputFormatter" formControlName="store_id"/>
+                    <input type="text" id="store" class="form-control" [ngbTypeahead]="storeSearch" [selectOnExact]="true" [resultFormatter]="storeFormatter" [inputFormatter]="inputFormatter" formControlName="store"/>
                 </div>
 
             </div>
@@ -28,7 +28,7 @@
                             <div class="row" [formGroupName]="i">
                                 <div class="col form-group">
                                     <label for="product">Product</label>
-                                    <input type="text" id="product" class="form-control" [ngbTypeahead]="productSearch" [selectOnExact]="true" [resultFormatter]="productFormatter" [inputFormatter]="inputFormatter" formControlName="product_id"/>
+                                    <input type="text" id="product" class="form-control" [ngbTypeahead]="productSearch" [selectOnExact]="true" [resultFormatter]="productFormatter" [inputFormatter]="inputFormatter" formControlName="product"/>
                                 </div>
                                 <div class="col form-group">
                                     <label for="quantity">Quantity</label>

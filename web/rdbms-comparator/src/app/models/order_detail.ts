@@ -10,4 +10,5 @@ export interface Product {
   dept:number
   price:number
   description:string
+  pg_id?:number
 }

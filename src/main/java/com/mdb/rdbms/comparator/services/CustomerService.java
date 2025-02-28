@@ -76,6 +76,10 @@ public class CustomerService {
         return new MetricsPage<>(queryResults, paging, queryResults.getFirst().getMeta().getCount(), queriesCount);
     }
 
+    public List<Customer> searchCustomersSimple(String searchTerm){
+        return mongoRepo.searchCustomers(searchTerm);
+    }
+
 
 
     public Page<Customer> getCustomers(String db, CustomerSearch customerSearch, int page){

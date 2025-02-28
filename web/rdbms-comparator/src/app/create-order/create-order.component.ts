@@ -12,7 +12,7 @@ import {
   switchMap,
   tap
 } from "rxjs";
-import {Product} from "../models/order_detail";
+import {Product, OrderDetail} from "../models/order_detail";
 import {Response} from "../models/response";
 import {Customer} from "../models/customer";
 import {Order} from "../models/Order";
@@ -37,8 +37,8 @@ export class CreateOrderComponent implements OnInit{
     this.details = new FormArray([this.newOrderDetail()])
     this.orderForm = this.fb.group({
       purchaseOrder:['', Validators.required],
-      customer_id:['', Validators.required],
-      store_id:['', Validators.required],
+      customer:['', Validators.required],
+      store:['', Validators.required],
       details: this.details
     })
   }
@@ -49,12 +49,13 @@ export class CreateOrderComponent implements OnInit{
 
   productFormatter = (x: { name: string, description: string }) => x.name + ' ' + x.description
   storeFormatter = (x: { name: string, region: string }) => x.name + ' ' + x.region
+  customerFormatter = (x: { title: string, firstName: string, lastName: string }) => (x.title? x.title : ' ') + ' ' + (x.firstName? x.firstName: '') + ' ' + (x.lastName? x.lastName : '')
   inputFormatter =  (x: { name: string, description: string }) => x.name
 
   newOrderDetail():FormGroup  {
     return this.fb.group({
       quantity: ['', Validators.required],
-      product_id:['', Validators.required]
+      product:['', Validators.required]
     })
 
   }
@@ -70,6 +71,18 @@ export class CreateOrderComponent implements OnInit{
             }))
         )
   );
+
+  customerSearch = (searchTerm: Observable<string>) =>
+      searchTerm.pipe(
+          debounceTime(300),
+          distinctUntilChanged(),
+          switchMap(term =>
+              this.service.getCustomerByName(term).pipe(
+                  catchError(e => {
+                    return of([]);
+                  }))
+          )
+      );
 
   storeSearch = (searchTerm: Observable<string>) =>
       searchTerm.pipe(
@@ -88,7 +101,32 @@ export class CreateOrderComponent implements OnInit{
   }
 
   save(): void {
-    this.service.createOrder(this.orderForm.value).subscribe((data: Response<Order>)=> {
+
+    let tempDetails:Array<OrderDetail> = [];
+    for(let detail of this.orderForm.get('details')?.value){
+      let product:Product = detail.product
+      if (product.id == null) {
+        product.id = detail.product.pg_id
+      }
+      let tmpDetail:OrderDetail = {product: product, quantity: detail.quantity}
+      tempDetails.push(tmpDetail)
+    }
+
+    let customer = this.orderForm.get('customer')?.value
+    if (customer.id == null){
+      customer.id = customer.pg_id
+    }
+
+    const order: Order = {
+
+      details: tempDetails,
+      purchaseOrder: this.orderForm.get('purchaseOrder')?.value,
+      customer: customer,
+      store: this.orderForm.get('store')?.value,
+      totalPieces: tempDetails.length,
+      warehouseId: 1
+    }
+    this.service.createOrder(order).subscribe((data: Response<Order>)=> {
       this.order = data;
     })
   }

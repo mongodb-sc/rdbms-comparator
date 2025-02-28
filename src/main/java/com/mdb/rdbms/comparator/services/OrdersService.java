@@ -60,7 +60,7 @@ public class OrdersService {
 
     public Response<Order> create(Order order) {
         // Lines to save Order in Mongo
-        Customer customer = customerService.getCustomerById(order.getCustomer_id(), "pg");
+        Customer customer = customerService.getCustomerById(order.getCustomer().getId(), "pg");
 
         List<Metrics> metrics = new ArrayList<>();
         long startTime = System.currentTimeMillis();
@@ -74,12 +74,12 @@ public class OrdersService {
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
         for (OrderDetails details: order.getDetails()){
-            Product product = productJPARepository.findById(details.getProduct_id()).get();
+            Product product = productJPARepository.findById(details.getProduct().getId()).get();
             details.setProduct(product);
         }
 
         order.setCustomer(customer);
-        order.setStore(storeJPARepository.findById(order.getStore_id()).get());
+        order.setStore(storeJPARepository.findById(order.getStore().getId()).get());
         order.setShippingAddress(customer.getAddress());
         Order pgOrder = jpaRepo.save(order);
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
@@ -108,7 +108,8 @@ public class OrdersService {
     }
 
     public Page<Order> getAllOrders(String db, OrderSearch orderSearch, int page){
-        Pageable paging = PageRequest.of(page, 100);
+        Pageable paging = PageRequest.of(page, 100, Sort.by("orderDate").descending());
+
         if (db.equals("mongodb")) {
             return mongoSearch(orderSearch, paging);
         } else {

@@ -65,6 +65,8 @@ public class Customer {
     @Transient
     private Meta meta;
 
+    Integer pg_id;
+
     public Meta getMeta() {
         return meta;
     }
@@ -145,6 +147,14 @@ public class Customer {
         this.recentOrders = recentOrders;
     }
 
+    public Integer getPg_id() {
+        return this.pg_id;
+    }
+
+    public void setPg_id(Integer pg_id) {
+        this.pg_id = pg_id;
+    }
+
 
     public class Meta {
         private long count;
@@ -174,5 +184,8 @@ public class Customer {
         public void setToken(String token) {
             this.token = token;
         }
+
+
+
     }
 }

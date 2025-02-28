@@ -19,7 +19,7 @@ export class CustomerSearchComponent implements OnInit{
 
   data?: Page<Customer[]>;
   queries?: Observable<Query[]>;
-  recent?: Observable<Response<Order[]>>;
+  recent: Array<Observable<Response<Order[]>>> = [];
   elapsed = {
     duration:  0,
     elapsedLabel: '',
@@ -116,7 +116,7 @@ export class CustomerSearchComponent implements OnInit{
     this.rowCollapsed[index] = !this.rowCollapsed[index]
     console.log(`Calling the DB for the recent transactions with index ${index}`)
     if (!this.rowCollapsed[index]) { // only call if they are opening the row, not on closing
-      this.recent = this.service.getRecentOrders(customerId);
+      this.recent[index] = this.service.getRecentOrders(customerId);
     }
 
   }

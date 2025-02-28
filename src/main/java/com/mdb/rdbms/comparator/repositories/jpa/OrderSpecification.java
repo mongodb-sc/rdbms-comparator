@@ -122,6 +122,7 @@ public class OrderSpecification implements Specification<Order> {
                 predicates.add(cb.equal(customerJoin.get("title"), orderSearch.getCustomer().getTitle()));
             }
         }
+
         return cb.and(predicates.toArray(new Predicate[predicates.size()]));
     }
 

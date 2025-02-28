@@ -30,7 +30,7 @@ public class Order {
     @MongoId
     String _id;
 
-    Date orderDate;
+    Date orderDate = new Date();
     Integer warehouseId;
     Date fillDate;
     String purchaseOrder;

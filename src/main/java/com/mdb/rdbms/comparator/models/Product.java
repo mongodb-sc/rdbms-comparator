@@ -26,6 +26,7 @@ public class Product {
     int dept;
     BigDecimal price;
     String description;
+    Integer pg_id;
 
     public Integer getId() {
         return id;
@@ -74,5 +75,13 @@ public class Product {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public Integer getPg_id() {
+        return pg_id;
+    }
+
+    public void setPg_id(Integer pg_id) {
+        this.pg_id = pg_id;
     }
 }

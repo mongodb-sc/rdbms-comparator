@@ -56,12 +56,9 @@ export class AppService {
     return this.http.post<Response<Customer>>(`${this.baseUrl}/api/customers`, formValues);
   }
 
-  createOrder(formValues?: any):Observable<Response<Order>> {
-    for (let detail of formValues.details){
-      detail.product_id = detail.product_id.id
-    }
-    formValues.store_id = formValues.store_id.id
-    return this.http.post<Response<Order>>(`${this.baseUrl}/api/orders`, formValues);
+  createOrder(order:Order):Observable<Response<Order>> {
+
+    return this.http.post<Response<Order>>(`${this.baseUrl}/api/orders`, order);
   }
 
   getRecentOrders(customerId: number){
@@ -79,6 +76,10 @@ export class AppService {
     return this.http.get<Store[]>(`${this.baseUrl}/api/stores/search`, {params: params});
   }
 
+  getCustomerByName(searchTerm: string): Observable<Customer[]> {
+    let params = new HttpParams().set('searchTerm', searchTerm).set('db',this.useMongo ? 'mongodb' : 'pg' )
+    return this.http.get<Customer[]>(`${this.baseUrl}/api/customers/autocomplete`, {params: params});
+  }
 
 
 

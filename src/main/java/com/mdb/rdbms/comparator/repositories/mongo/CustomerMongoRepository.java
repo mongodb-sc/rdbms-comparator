@@ -29,5 +29,7 @@ public interface CustomerMongoRepository extends MongoRepository<Customer, Integ
     List<Customer> searchCustomers(String queryTerm, int skip, int limit);
 
 
-
+    @Aggregation(pipeline= {"{'$search': {index:'customer_search', count: {type: 'total'},text:{ query:?0, fuzzy:{},path:['lastName','firstName','address.city','address.state','address.zip','phones.number','emails.email']}}}",
+            "{'$project': {title: 1,firstName: 1,lastName: 1,address: 1,phones: 1,emails: 1, pg_id: 1,meta: {count: '$$SEARCH_META.count.total', score: { $meta: 'searchScore'},token: { $meta: 'searchSequenceToken'}}}}"})
+    List<Customer> searchCustomers(String queryTerm);
 }

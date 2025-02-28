@@ -25,6 +25,7 @@ repositories {
 dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
     implementation 'org.postgresql:postgresql'
@@ -38,6 +39,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.7.0'
     implementation "me.paulschwarz:spring-dotenv:4.0.0"
     implementation 'org.apache.logging.log4j:log4j-mongodb:2.24.3'
+    implementation 'org.jboss.logging:jboss-logging:3.6.1.Final'
     implementation "org.springframework.boot:spring-boot-starter-log4j2:3.4.0"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

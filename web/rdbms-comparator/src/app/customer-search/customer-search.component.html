@@ -148,10 +148,10 @@
               <tr (click)="collapseRow(i, customer.id)">
                 <td><i [ngClass]=" rowCollapsed[i] ? 'bi bi-caret-down' : 'bi bi-caret-up'"></i></td>
                 <td>{{ customer.title }} {{ customer.firstName }} {{ customer.lastName }}</td>
-                <td>{{ customer.address.street }}</td>
-                <td>{{ customer.address.city }}</td>
-                <td>{{ customer.address.state }}</td>
-                <td>{{ customer.address.zip }}</td>
+                <td>{{ customer.address?.street }}</td>
+                <td>{{ customer.address?.city }}</td>
+                <td>{{ customer.address?.state }}</td>
+                <td>{{ customer.address?.zip }}</td>
                 <td>
                   <p *ngFor="let phone of customer.phones">{{phone.type}}: {{phone.number}}
                 </td>
@@ -186,8 +186,8 @@
                                               </tr>
                                           </ng-container>
                                       } @else {
-                                          <ng-container *ngIf="recent | async as recent">
-                                              <tr *ngFor="let order of recent.content">
+                                          <ng-container *ngIf="recent[i] | async as currentResult">
+                                              <tr *ngFor="let order of currentResult.content">
                                                   <td>{{ order.orderDate | date: 'short'}}</td>
                                                   <td>{{ order.totalPieces}}</td>
                                                   <td>{{ order.orderStatus}}</td>

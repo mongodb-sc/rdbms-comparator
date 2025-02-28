@@ -9,6 +9,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     password: starwars
     type: org.postgresql.ds.PGPoolingDataSource
+    name: postgres
   jpa:
     properties:
       hibernate:

@@ -55,6 +55,11 @@ public class CustomerController {
         return this.service.searchCustomersSimple(searchTerm, page);
     }
 
+    @GetMapping("autocomplete")
+    public List<Customer> autocompleteSearch(@RequestParam("searchTerm") String searchTerm) {
+        return this.service.searchCustomersSimple(searchTerm);
+    }
+
 
     @GetMapping("{id}")
     public Customer getCustomer(@PathVariable("id") Integer id,@RequestParam(name = "db", required = false, defaultValue="pg") String db ){
