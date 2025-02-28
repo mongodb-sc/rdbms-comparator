@@ -24,6 +24,11 @@
                         <p *ngIf="data.queriesIssued" class="card-subtitle"><i class="bi bi-search"></i> Issued {{data.queriesIssued}} queries to obtain results.  </p>
                     </ng-container>
                 </ng-container>
+                <ng-container *ngIf="elapsed.loading">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </ng-container>
             </div>
             <div>
                 <button class="btn btn-outline-primary me-3" type="button" (click)="refresh()">Refresh Data</button>
