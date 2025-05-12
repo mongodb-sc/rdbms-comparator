@@ -114,7 +114,6 @@ export class CustomerSearchComponent implements OnInit{
 
   collapseRow(index: number, customerId: number){
     this.rowCollapsed[index] = !this.rowCollapsed[index]
-    console.log(`Calling the DB for the recent transactions with index ${index}`)
     if (!this.rowCollapsed[index]) { // only call if they are opening the row, not on closing
       this.recent[index] = this.service.getRecentOrders(customerId);
     }

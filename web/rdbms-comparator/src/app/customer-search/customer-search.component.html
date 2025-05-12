@@ -168,7 +168,7 @@
                   <ng-container *ngIf="!rowCollapsed[i]">
                       <td colspan="8">
                           <div class="accordion accordion-item" [ngbCollapse]="rowCollapsed[i]">
-                              <div class="card"  >
+                              <div class="card">
                                   <table class="table table-borderless table-group-divider">
                                       <thead>
                                       <tr>
@@ -198,6 +198,13 @@
                                                   <td>{{ order.orderStatus}}</td>
                                                   <td>{{ order.total | currency}}</td>
                                                   <td>{{ order.deliveryDate | date: 'short'}}</td>
+                                              </tr>
+                                          </ng-container>
+                                          <ng-container *ngIf="!recent[i]">
+                                              <tr colspan="5">
+                                                  <div class="spinner-border text-success" role="status">
+                                                      <span class="sr-only"></span>
+                                                  </div>
                                               </tr>
                                           </ng-container>
                                       }
