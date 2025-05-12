@@ -27,7 +27,7 @@ export class OrderSearchComponent implements OnInit{
   elapsed = {
     duration:  0,
     elapsedLabel: '',
-    loading:true
+    loading:false
   }
 
   isCollapsed = true;

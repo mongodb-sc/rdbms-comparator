@@ -23,7 +23,7 @@ export class CustomerSearchComponent implements OnInit{
   elapsed = {
     duration:  0,
     elapsedLabel: '',
-    loading:true
+    loading:false
   }
   showSimpleSearch = false;
   showComplexSearch =true;
