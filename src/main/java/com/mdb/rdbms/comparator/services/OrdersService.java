@@ -64,8 +64,10 @@ public class OrdersService {
 
         List<Metrics> metrics = new ArrayList<>();
         long startTime = System.currentTimeMillis();
+
         order.setCustomer(customer);
         mongoRepo.save(order);
+
         metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         // Lines to save Order in Postgres
 
@@ -73,6 +75,7 @@ public class OrdersService {
         Session session = entityManager.unwrap(Session.class);
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
+
         for (OrderDetails details: order.getDetails()){
             Product product = productJPARepository.findById(details.getProduct().getId()).get();
             details.setProduct(product);
@@ -81,6 +84,7 @@ public class OrdersService {
         order.setCustomer(customer);
         order.setStore(storeJPARepository.findById(order.getStore().getId()).get());
         order.setShippingAddress(customer.getAddress());
+
         Order pgOrder = jpaRepo.save(order);
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
         return new Response<>(pgOrder, metrics);

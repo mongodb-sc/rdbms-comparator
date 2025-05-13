@@ -34,6 +34,7 @@ public class Customer {
         this.address = address;
     }
 
+    String location = "US";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -155,6 +156,13 @@ public class Customer {
         this.pg_id = pg_id;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public class Meta {
         private long count;

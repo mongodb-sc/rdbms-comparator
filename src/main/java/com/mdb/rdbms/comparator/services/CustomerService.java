@@ -47,16 +47,20 @@ public class CustomerService {
     public Response<Customer> create(Customer customer) {
         List<Metrics> metrics = new ArrayList<>();
         long startTime = System.currentTimeMillis();
+
         mongoRepo.save(customer);
+
         metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         customer.set_id(null);
 
         Session session = entityManager.unwrap(Session.class);
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
+
         Address saveAddress = addressJpaRepo.save(customer.getAddress());
         customer.setAddress(saveAddress);
         Customer cust =  custJpaRepo.save(customer);
+
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
         return new Response<>(cust, metrics);
     }

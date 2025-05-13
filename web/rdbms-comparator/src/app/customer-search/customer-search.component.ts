@@ -74,7 +74,7 @@ export class CustomerSearchComponent implements OnInit{
 
 
   ngOnInit(): void {
-      this.refresh();
+      //this.refresh();
   }
 
   setPage(newPage:number){

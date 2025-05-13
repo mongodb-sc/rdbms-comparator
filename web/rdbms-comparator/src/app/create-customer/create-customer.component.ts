@@ -18,7 +18,7 @@ export class CreateCustomerComponent implements OnInit{
   queries?: Observable<Query[]>
   phones: FormArray;
   emails: FormArray;
-  
+  showCloseButton = false;
   customer?:Response<Customer>
 
   constructor(private fb: FormBuilder, private service: AppService, private offCanvasService: NgbOffcanvas) {
@@ -75,6 +75,7 @@ export class CreateCustomerComponent implements OnInit{
 
     this.service.createCustomer(this.customerForm.value).subscribe((data: Response<Customer>)=> {
       this.customer = data;
+      this.showCloseButton = true;
     })
   }
 

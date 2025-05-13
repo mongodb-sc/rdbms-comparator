@@ -47,6 +47,7 @@ public class Order {
     Date deliveryDate;
     Integer orderType;
     Integer employeeId;
+    String location = "US";
 
     @Transient
     Integer customer_id;
@@ -293,5 +294,13 @@ public class Order {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
