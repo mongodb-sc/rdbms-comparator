@@ -86,6 +86,7 @@ public class OrdersService {
         order.setShippingAddress(customer.getAddress());
 
         Order pgOrder = jpaRepo.save(order);
+
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
         return new Response<>(pgOrder, metrics);
  

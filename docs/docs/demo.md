@@ -1,37 +1,50 @@
+---
+sidebar_position: 2
+---
+
 # How to Demo
 
-Open your browser to    http://localhost:8080/index.html  This should load a page that looks like this.
+## Key Differentiators
+
+There are a few key concepts that the demo is designed to be able to highlight. Details on each of these is shown in the differentiators sections in the menu or with the links below.
+
+- [Developer friendly nature of the document model when compared to RDBMS systems.](#developer-friendly)
+- [Performance advantages of removing unncessary joins](#performance-benefits)
+- [Developer Data Platform benefits of having features like Atlas Search included](#developer-data-platform)
+- [Run anywhere](#run-anywhere)
+
+## Accessing the Demo
+
 You can also use the Kanopy deployed version found at https://rdbms-comparator.sa-demo.staging.corp.mongodb.com/
 
-## Key Concepts
 
-There are a few key concepts that the demo is designed to be able to highlight. 
 
-- [Developer friendly nature of the document model when compared to RDBMS systems.](#developer-friendly-benefits-of-the-document-model-) 
-- [Performance advantages of removing unncessary joins](#performance-benefits)
-- [Developer Data Platform benefits of having features like Atlas Search included]
-- Run anywhere. 
-
-## How to show each differentiator
-
-### Developer friendly benefits of the document model. 
+## Developer Friendly 
 
 One of the key highlights of the document model is the developer friendly nature and how easily the document model maps to objects in Code. 
 
 While we have traditionally talked about ORM's (or Object Relational Mappers) as bad things, tools like Spring-Data are some of the most common frameworks our customer use. You can use this demo to highlight some of the complexity that RDBMS systems bring, even when using these tools
 with this demo. 
 
+### Data Model Differences 
+
 Start with reviewing the Data Models for Postgres and MongoDB. You can find images of those in the IMG folder or view them below. 
-![image](img/Pg_schema.png)
+![image](/img/Pg_schema.png)
 
 It takes 8 tables to create the schema for the necessary data in Postgres. Specifically focus on the Customer table and it's dependencies on:
 - Address
 - Phone
 - Email
 
+Compare this to the same data modeled in MongoDB
+
+![image](/img/mongo_schema.png)
+
 A single customer has 1 associated address, and can have multiple associated phone numbers and email addresses.  From a schema perspective it doesn't look overly complicated, but lets view it in the Spring-Data code. 
 
 Open up the source code file for [Customer.java](src/main/java/com/mdb/rdbms/comparator/models/Customer.java). 
+
+### Code Differences
 
 Start by looking at the annotations at the top. 
 
@@ -70,12 +83,18 @@ None of the config items are required to support MongoDB. In fact that only entr
     @Document("customers")
     public class Customer {
     
-    // Can use either of these annotations.  @MongoId is useful in this case when the ID between objects is different. 
     @Id
     @MongoId
     String _id;
 
 ```
+
+:::note
+Both the `@Id` and the `@MongoId` annotations are valid, and you can chose which one to use. `@Id` tends to be more common. You might see both 
+in the source code for the demo because we are leveraging the auto-assign nature of postgres identity columns to auto-generate the primary key values. These require the values
+to be an integer, where by default the `ObjectId` value in MongoDB maps to a string. 
+
+:::
 
 No additional work to support the nested objects. They are embedded so they are assumed to be treated as embedded documents or objects in side the Customer object. 
 
@@ -133,36 +152,37 @@ public Order create(Order order) {
 
 ```
 
-### Performance Benefits
+## Performance Benefits
 
 A second benefit of the document model is that the reduced need for joins leads to better performance. You can retrieve all of the data you need in a single request, instead of having to hit mutliple places on disk
-and multiple IOPS to get the same data. 
+and multiple IOPS to get the same data.
 
-To show this, execute some queries against the Customer screen. When you first launch the page, it will attempt to find all of the records (essentially a `find({})`) and return them back in a paginated fashion. 
-Standard setup should find 10K customer records. Take note of the amount of time it takes to get back the results with the toggle if the default position of Postgres. Then ask your customer these questions. 
+To show this, execute some queries against the Customer screen. When you first launch the page, it will attempt to find all of the records (essentially a `find({})`) and return them back in a paginated fashion.
+Standard setup should find 10K customer records. Take note of the amount of time it takes to get back the results with the toggle if the default position of Postgres. Then ask your customer these questions.
 
-- Did that feel like an acceptable response time to retrieve the first page of 100 results out of 10k? 
-- Any other metrics shown on the page that stand out to the customer?  (*HINT* they should look at the queries issued count). 
+- Did that feel like an acceptable response time to retrieve the first page of 100 results out of 10k?
+- Any other metrics shown on the page that stand out to the customer?  (*HINT* they should look at the queries issued count).
 
 After that do these steps
 
-- Hit the refresh data button and execute the same search again. It should get a bit faster as the results are now in the postgres cache. 
-- Then select a different page, and watch the performance. 
-- Finally hit the "Show Queries" button. 
+- Hit the refresh data button and execute the same search again. It should get a bit faster as the results are now in the postgres cache.
+- Then select a different page, and watch the performance.
+- Finally hit the "Show Queries" button.
 
-Show Queries opens up a panel on the bottom that will show you all 302 queries needed by spring-data to retrieve the results from Postgres. 
+Show Queries opens up a panel on the bottom that will show you all 302 queries needed by spring-data to retrieve the results from Postgres.
 
-***IMPORTANT NOTE***
+:::important
 This performance issue is not Postgres's fault, but Spring-data (Hibernate's). It's a by product of how it maps the queries to classes and is an example of the N+1 problem. Here is where Spring explains the problem and their roadmap to finally fix it [Spring-Data N+1 Query Problem](https://spring.io/blog/2023/08/31/this-is-the-beginning-of-the-end-of-the-n-1-problem-introducing-single-query)
-But the result is that Postgres performs slower because of the excessive queries. 
+But the result is that Postgres performs slower because of the excessive queries.
+:::
 
-You can solve this by not using Spring-data, but then you make the [Developer Experience](#developer-friendly-benefits-of-the-document-model-) much much worse. 
+You can solve this by not using Spring-data, but then you make the [Developer Experience](#developer-friendly-benefits-of-the-document-model-) much much worse.
 
-But this problem isn't just limited to reads. Lets take a look at the queries that get generated as a result of doing the insert of a Customer. 
+But this problem isn't just limited to reads. Lets take a look at the queries that get generated as a result of doing the insert of a Customer.
 
-Remember that a customer can have multiple phone numbers & email addresses? 
+Remember that a customer can have multiple phone numbers & email addresses?
 
-When Spring-Data saves the customer record for this, it performs these in the following order. 
+When Spring-Data saves the customer record for this, it performs these in the following order.
 
 ```sql
 
@@ -178,44 +198,64 @@ When Spring-Data saves the customer record for this, it performs these in the fo
     update phone set customer_id=? where id=?
 
 ```
-10 SQL statements to insert a simple customer with only 1 phone number entry and 1 email entry. 
+10 SQL statements to insert a simple customer with only 1 phone number entry and 1 email entry.
 
-The equivalent MongoDB command issued was 
+The equivalent MongoDB command issued was
 
 ``` 
 {"insert": "customers", "ordered": true, "txnNumber": 1, "$db": "rdbms", "$clusterTime": {"clusterTime": {"$timestamp": {"t": 1734710285, "i": 2}}, "signature": {"hash": {"$binary": {"base64": "AAAAAAAAAAAAAAAAAAAAAAAAAAA=", "subType": "00"}}, "keyId": 0}}, "lsid": {"id": {"$binary": {"base64": "1SBbuUuqS0uis80779gwFg==", "subType": "04"}}}, "documents": [{"_id": "676617c2722a7f4d270da4a7", "firstName": "Jeff", "lastName": "Cheak", "title": "Senior Solution Architect", "phones": [{"type": "work", "number": "913-220-5936"}], "emails": [{"type": "work", "email": "test@test.com"}], "address": {"city": "Olathe", "state": "KS", "country": "US", "zip": "66062"}, "_class": "com.mdb.rdbms.comparator.models.records.Customer"}]}
 ```
 
-So they pay a performance cost on inserts as well as reads. In small scale systems you can get away with these things, but in large complex systems, these are the things that eat: 
+So they pay a performance cost on inserts as well as reads. In small scale systems you can get away with these things, but in large complex systems, these are the things that eat:
 
 - Hardware cost
 - Developer Time
 - Customer Satisfaction
 
-You can repeat the same issued with the Orders page to see a more dramatic version. 
+You can repeat the same issued with the Orders page to see a more dramatic version.
 
 
-### Run Anywhere
+## Run Anywhere
 
 The final key benefit for MongoDB is the ability to run anywhere, but to run anywhere CONSISTENTLY. Because it's the same underlying engine for the DB, you can be assured that your commands will function
  the same way regardless of your deployment topology. By contrast here are the different ways of doing PostgresQL across the 3 major CSP's
 
-#### AWS Offering
+### AWS Offering
 
-![image](img/aws_postgres.png)
+![image](/img/aws_postgres.png)
 
-#### GCP Offerings
+### GCP Offerings
 
-![image](img/gcp_postgres.png)
+![image](/img/gcp_postgres.png)
 
-#### Azure Postgres
+### Azure Postgres
 
-![image](img/azure_postgres.png)
+![image](/img/azure_postgres.png)
+
+## Developer Data Platform
+
+When deployed in Atlas, you gain additional benefits from the developer data platform, especially the use of Atlas Search
+
+WHen viewing the `Customers` search screen and having `MongoDB` selected for the data base, you will see a new toggle button show up titled. Switching that toggle with convert the search page to a ***Simple Search*** format which uses Atlas Search to search for the values you provide across a number of fields. 
+The fields included in the search are 
+- First Name
+- Last Name
+- Address
+  - State
+  - City
+  - Zip
+- Email Address
+- Phone Number
+
+![image](/img/simple_search_screenshot.png)
+
+This enables the google like search experience and the non-deterministic results match. You can select any name from the result set and find it, along with other possible matches. 
+All of which uses the same `Repository` pattern as earlier searches. This is a functional enhancement that Postgres can't compete with. 
 
 
 
 
-### Additional Resources
+## Additional Resources
 
 There is a recorded version of how to use the MongoLogistics tool to demo the differences. You can view it here [Josh Smith Demo Video](https://drive.google.com/file/d/1njXlVx3E8vukUteKWpsTuvBy7TT9kX7p/view?usp=drive_link)
 The deck used in the demo can be found here [Demo Deck](https://docs.google.com/presentation/d/1JAXjDMlUrH4IIpmhlOSK4NHA5Pz2TLaia1KF4Ewo6EQ/edit?usp=drive_link)
