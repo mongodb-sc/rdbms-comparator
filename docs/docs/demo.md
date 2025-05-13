@@ -42,7 +42,7 @@ Compare this to the same data modeled in MongoDB
 
 A single customer has 1 associated address, and can have multiple associated phone numbers and email addresses.  From a schema perspective it doesn't look overly complicated, but lets view it in the Spring-Data code. 
 
-Open up the source code file for [Customer.java](src/main/java/com/mdb/rdbms/comparator/models/Customer.java). 
+Open up the source code file for [Customer.java](https://https://github.com/jesmith17/rdbms_comparator/tree/main/src/main/java/com/mdb/rdbms/comparator/models/Customer.java). 
 
 ### Code Differences
 
