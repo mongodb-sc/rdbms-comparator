@@ -87,9 +87,15 @@ public class CustomerService {
 
 
     public Page<Customer> getCustomers(String db, CustomerSearch customerSearch, int page){
-        Pageable paging = PageRequest.of(page, 100);
+        Sort sortBy = Sort.by(List.of(
+                new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "lastName"),
+                new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "firstName"),
+                new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "address.city")
+        ));
+        Pageable paging = PageRequest.of(page, 100, sortBy);
 
         if(db.equals("mongodb")) {
+
             Page<Customer> results = null;
             double queriesCount = 0;
             if (customerSearch.isFuzzySearch()) {
@@ -106,6 +112,7 @@ public class CustomerService {
             }
             return new MetricsPage<>(results, queriesCount);
         } else {
+
             CustomerSpecification customerSpecification = new CustomerSpecification(customerSearch);
             Session session = entityManager.unwrap(Session.class);
             Statistics stats = session.getSessionFactory().getStatistics();

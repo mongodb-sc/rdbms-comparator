@@ -16,7 +16,7 @@ import java.util.List;
 public interface CustomerMongoRepository extends MongoRepository<Customer, Integer> {
 
 
-    @Query(value="?0", sort = "{'firstName': -1, 'lastName': 1, 'address.city':  1}")
+    @Query(value="?0")
     Page<Customer> sortCustomers(HashMap<String, Object> params, Pageable paging);
 
     @Query(value="{'pg_id':  ?0}")

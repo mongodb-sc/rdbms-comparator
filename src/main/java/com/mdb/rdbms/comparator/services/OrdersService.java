@@ -190,6 +190,7 @@ public class OrdersService {
         }
         params.remove("customer.phones");
         params.remove("customer.emails");
+        params.remove("customer.location");
         params.remove("lucene");
         params.values().removeIf(Objects::isNull);
         return params;
