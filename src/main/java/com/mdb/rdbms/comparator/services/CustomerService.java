@@ -93,7 +93,7 @@ public class CustomerService {
                 new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "address.city")
         ));
         Pageable paging = PageRequest.of(page, 100, sortBy);
-
+        long startTime = System.currentTimeMillis();
         if(db.equals("mongodb")) {
 
             Page<Customer> results = null;
@@ -110,6 +110,7 @@ public class CustomerService {
                 results = mongoRepo.sortCustomers(params, paging);
                 queriesCount = registry.counter("queries.issued").count() - startCount;
             }
+            logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));
             return new MetricsPage<>(results, queriesCount);
         } else {
 
@@ -118,6 +119,7 @@ public class CustomerService {
             Statistics stats = session.getSessionFactory().getStatistics();
             stats.clear();
             Page<Customer> results = custJpaRepo.findAll(customerSpecification, paging);
+            logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));
             return new MetricsPage<>(results, stats.getPrepareStatementCount());
 
         }
