@@ -21,9 +21,7 @@ public class MongoDBCommandCountListener extends MongoMetricsCommandListener {
     @Override
     public void commandStarted(CommandStartedEvent event) {
         super.commandStarted(event);
-        logger.info(event);
         logger.info(event.getCommand());
-        //logger.debug(System.currentTimeMillis());
 
     }
 
