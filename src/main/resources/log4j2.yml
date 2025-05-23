@@ -1,5 +1,10 @@
 Configuration:
   Appenders:
+    JsonTemplateLayout:
+      eventTemplateUri: "classpath:JsonLayout.json"
+      eventTemplateAdditionalField:
+        - key: "location"
+          value: "US"
     Console:
       name: "CONSOLE"
       PatternLayout:
@@ -27,7 +32,6 @@ Configuration:
         level: "DEBUG"
         AppenderRef:
           - ref: "MONGO"
-          - ref: "CONSOLE"
     Logger:
       - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
         level: "WARN"

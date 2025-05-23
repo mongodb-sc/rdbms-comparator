@@ -18,7 +18,7 @@ public class QueryService {
 
 
     public List<Query> getQueries(String threadName, long threadId, long time) {
-        long startTime = time - 60000;
+        long startTime = time - 30000;
         return repository.findQueries(threadName, threadId, startTime);
     }
 
