@@ -1,22 +1,16 @@
 Configuration:
   Appenders:
-    JsonTemplateLayout:
-      eventTemplateUri: "classpath:JsonLayout.json"
-      eventTemplateAdditionalField:
-        - key: "location"
-          value: "US"
     Console:
       name: "CONSOLE"
       PatternLayout:
-        pattern: "%d [%t] %p %c - %m%n"
+        pattern: "%d [%T %t %tp] %p %c - %m%n"
     NoSql:
       name: "MONGO"
+      JsonTemplateLayout:
+        eventTemplateUri: "classpath:customJsonLayout.json"
       MongoDb:
         connection: "${env:MONGODB_LOGGING_URI}"
         capped: true
-      KeyValuePair:
-        - key: "location"
-          value: "US"
   Loggers:
     Root:
       level: "DEBUG"

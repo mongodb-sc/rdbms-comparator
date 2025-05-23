@@ -104,4 +104,8 @@ public class CustomerSearch {
     public void setEmail(Email email) {
         this.email = email;
     }
+
+    public String getLocation(){
+        return "US";
+    }
 }

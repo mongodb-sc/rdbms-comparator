@@ -4,6 +4,7 @@ import com.mdb.rdbms.comparator.models.*;
 import com.mdb.rdbms.comparator.repositories.jpa.*;
 import com.mdb.rdbms.comparator.repositories.mongo.CustomerMongoRepository;
 import com.mongodb.client.MongoClient;
+import com.mongodb.session.ClientSession;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.persistence.EntityManager;
@@ -33,6 +34,9 @@ public class CustomerService {
 
     @Autowired
     MeterRegistry registry;
+
+    @Autowired
+    MongoClient mongoClient;
 
     @Autowired
     EntityManager entityManager;
@@ -119,7 +123,7 @@ public class CustomerService {
             Statistics stats = session.getSessionFactory().getStatistics();
             stats.clear();
             Page<Customer> results = custJpaRepo.findAll(customerSpecification, paging);
-            logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));
+
             return new MetricsPage<>(results, stats.getPrepareStatementCount());
 
         }
@@ -142,6 +146,7 @@ public class CustomerService {
         params.put("firstName", customerSearch.getFirstName());
         params.put("lastName", customerSearch.getLastName());
         params.put("title", customerSearch.getTitle());
+        params.put("location","US");
         params.put("address.city", customerSearch.getCity());
         params.put("address.state", customerSearch.getState());
         params.put("address.street", customerSearch.getStreet());

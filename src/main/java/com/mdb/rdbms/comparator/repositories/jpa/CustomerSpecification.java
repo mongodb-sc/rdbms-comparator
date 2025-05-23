@@ -2,6 +2,7 @@ package com.mdb.rdbms.comparator.repositories.jpa;
 
 import com.mdb.rdbms.comparator.models.*;
 import com.mdb.rdbms.comparator.models.Order;
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -23,7 +24,7 @@ public class CustomerSpecification implements Specification<Customer> {
     public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (!customerSearch.getFirstName().isEmpty()) {
+        if (!StringUtils.isEmpty(customerSearch.getFirstName())) {
             if (fuzzySearch){
                 predicates.add(cb.like(root.get("firstName"), customerSearch.getFirstName()));
             } else {
@@ -31,7 +32,7 @@ public class CustomerSpecification implements Specification<Customer> {
             }
 
         }
-        if (!customerSearch.getLastName().isEmpty()) {
+        if (!StringUtils.isEmpty(customerSearch.getLastName())) {
             if (fuzzySearch){
                 predicates.add(cb.like(root.get("lastName"), customerSearch.getLastName()));
             } else {
@@ -39,14 +40,14 @@ public class CustomerSpecification implements Specification<Customer> {
             }
 
         }
-        if (!customerSearch.getTitle().isEmpty()) {
+        if (!StringUtils.isEmpty(customerSearch.getTitle())) {
             if (fuzzySearch){
                 predicates.add(cb.like(root.get("title"), customerSearch.getTitle()));
             } else {
                 predicates.add(cb.equal(root.get("title"), customerSearch.getTitle()));
             }
         }
-        if (!customerSearch.getCity().isEmpty() || !customerSearch.getState().isEmpty() || !customerSearch.getStreet().isEmpty() || !customerSearch.getZip().isEmpty()) {
+        if (!StringUtils.isEmpty(customerSearch.getCity()) || !StringUtils.isEmpty(customerSearch.getState()) || !StringUtils.isEmpty(customerSearch.getStreet()) || !StringUtils.isEmpty(customerSearch.getZip())) {
             Join<Customer, Address> addressJoin = root.join("address");
             if (!customerSearch.getCity().isEmpty()) {
                 if (fuzzySearch){
@@ -77,7 +78,7 @@ public class CustomerSpecification implements Specification<Customer> {
                 }
             }
         }
-        if (customerSearch.getPhone() != null && !customerSearch.getPhone().getNumber().isEmpty()) {
+        if (customerSearch.getPhone() != null && !StringUtils.isEmpty(customerSearch.getPhone().getNumber())) {
             Join<Customer, Phone> phoneJoin = root.join("phones");
             if (fuzzySearch) {
                 predicates.add(cb.like(phoneJoin.get("phone"), customerSearch.getPhone().getNumber()));
@@ -86,7 +87,7 @@ public class CustomerSpecification implements Specification<Customer> {
                 predicates.add(cb.equal(phoneJoin.get("number"), customerSearch.getPhone().getNumber()));
             }
         }
-        if (customerSearch.getEmail() != null && !customerSearch.getEmail().getEmail().isEmpty()) {
+        if (customerSearch.getEmail() != null && !StringUtils.isEmpty(customerSearch.getEmail().getEmail())) {
             Join<Customer, Email> emailJoin = root.join("emails");
             if (fuzzySearch) {
                 predicates.add(cb.like(emailJoin.get("email"), customerSearch.getEmail().getEmail()));
