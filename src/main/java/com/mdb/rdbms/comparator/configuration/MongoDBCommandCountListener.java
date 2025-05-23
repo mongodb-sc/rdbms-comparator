@@ -22,7 +22,7 @@ public class MongoDBCommandCountListener extends MongoMetricsCommandListener {
     public void commandStarted(CommandStartedEvent event) {
         super.commandStarted(event);
         logger.info(event.getCommand());
-        logger.debug(System.currentTimeMillis());
+        //logger.debug(System.currentTimeMillis());
 
     }
 

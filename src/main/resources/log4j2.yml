@@ -8,20 +8,17 @@ Configuration:
       name: "MONGO"
       MongoDb:
         connection: "${env:MONGODB_LOGGING_URI}"
+        capped: true
+      KeyValuePair:
+        - key: "location"
+          value: "US"
   Loggers:
     Root:
       level: "DEBUG"
       AppenderRef:
         - ref: "CONSOLE"
           level: "INFO"
-    Logger:
-      - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
-        level: "WARN"
-      - name: "org.springframework.data.mongodb.core"
-        level: "DEBUG"
-        AppenderRef:
-          - ref: "CONSOLE"
-            level: "DEBUG"
+    AsyncLogger:
       - name: "com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener"
         level: "INFO"
         AppenderRef:
@@ -30,8 +27,17 @@ Configuration:
         level: "DEBUG"
         AppenderRef:
           - ref: "MONGO"
+          - ref: "CONSOLE"
+    Logger:
+      - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
+        level: "WARN"
+      - name: "org.springframework.data.mongodb.core"
+        level: "DEBUG"
+        AppenderRef:
+          - ref: "CONSOLE"
+            level: "DEBUG"
       - name: "org.springframework"
-        level: "INFO"
+        level: "WARN"
         AppenderRef:
           - ref: "CONSOLE"
 
