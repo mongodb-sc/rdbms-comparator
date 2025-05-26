@@ -9,7 +9,7 @@ sidebar_position: 2
 There are a few key concepts that the demo is designed to be able to highlight. Details on each of these is shown in the differentiators sections in the menu or with the links below.
 
 - [Developer friendly nature of the document model when compared to RDBMS systems.](#developer-friendly)
-- [Performance advantages of removing unncessary joins](#performance-benefits)
+- [Performance advantages of removing unnecessary joins](#performance-benefits)
 - [Developer Data Platform benefits of having features like Atlas Search included](#developer-data-platform)
 - [Run anywhere](#run-anywhere)
 
@@ -96,7 +96,7 @@ to be an integer, where by default the `ObjectId` value in MongoDB maps to a str
 
 :::
 
-No additional work to support the nested objects. They are embedded so they are assumed to be treated as embedded documents or objects in side the Customer object. 
+No additional work to support the nested objects. They are embedded so they are assumed to be treated as embedded documents or objects inside the Customer object. 
 
 #### Address Specific Things ####
 
@@ -122,11 +122,11 @@ public Customer create(Customer customer) {
 
 ```
 
-Notice that the first part is the work to save it to NongoDB. Here we are using the Repository pattern in Spring-Data, so we call the appropraite
+Notice that the first part is the work to save it to MongoDB. Here we are using the Repository pattern in Spring-Data, so we call the appropriate
 repository's `save()` method and pass it the customer that we got from the API request. That's it, we are all done. 
 
 For Postgres, we have to invert the save. We have to take the address object out of the customer, we have to access a specific repository for the Address (another class we don't need with MongoDB) 
-and save the address. Then, becuase of how Spring-Data (really Hibernate) works, we then have to take the spring-data associated object and set it into the customer object. 
+and save the address. Then, because of how Spring-Data (really Hibernate) works, we then have to take the spring-data associated object and set it into the customer object. 
 Only then can we call `repository.save(customer)` to save the record to Postgres. 
 
 Once you have done this a few times, this will become intuitive, until you don't write this type of code again for a few months. Then you will make the same mistakes I did, and spend an extra hour or so
@@ -154,7 +154,7 @@ public Order create(Order order) {
 
 ## Performance Benefits
 
-A second benefit of the document model is that the reduced need for joins leads to better performance. You can retrieve all of the data you need in a single request, instead of having to hit mutliple places on disk
+A second benefit of the document model is that the reduced need for joins leads to better performance. You can retrieve all of the data you need in a single request, instead of having to hit multiple places on disk
 and multiple IOPS to get the same data.
 
 To show this, execute some queries against the Customer screen. When you first launch the page, it will attempt to find all of the records (essentially a `find({})`) and return them back in a paginated fashion.
@@ -236,7 +236,7 @@ The final key benefit for MongoDB is the ability to run anywhere, but to run any
 
 When deployed in Atlas, you gain additional benefits from the developer data platform, especially the use of Atlas Search
 
-WHen viewing the `Customers` search screen and having `MongoDB` selected for the data base, you will see a new toggle button show up titled. Switching that toggle with convert the search page to a ***Simple Search*** format which uses Atlas Search to search for the values you provide across a number of fields. 
+When viewing the `Customers` search screen and having `MongoDB` selected for the data base, you will see a new toggle button show up titled. Switching that toggle with convert the search page to a ***Simple Search*** format which uses Atlas Search to search for the values you provide across a number of fields. 
 The fields included in the search are 
 - First Name
 - Last Name
