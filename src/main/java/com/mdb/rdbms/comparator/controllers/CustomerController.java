@@ -1,7 +1,5 @@
 package com.mdb.rdbms.comparator.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mdb.rdbms.comparator.models.Customer;
 import com.mdb.rdbms.comparator.models.CustomerSearch;
 import com.mdb.rdbms.comparator.models.MetricsPage;
@@ -14,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

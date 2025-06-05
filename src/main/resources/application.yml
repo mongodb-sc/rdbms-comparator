@@ -40,6 +40,8 @@ management:
         - metrics
         - open-api
         - swagger-ui
+server:
+  max-http-request-header-size: 16KB
 
 
 # /api-docs endpoint custom path

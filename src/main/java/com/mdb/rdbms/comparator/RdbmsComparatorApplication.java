@@ -9,10 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.observability.ContextProviderFactory;
 import org.springframework.data.mongodb.observability.MongoObservationCommandListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.repository.query.QueryLookupStrategy;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 
 @SpringBootApplication
@@ -31,5 +33,11 @@ public class RdbmsComparatorApplication {
             builder.addCommandListener(new MongoDBCommandCountListener(registry));
         };
     }
+
+//    @Bean
+//    public ValidatingMongoEventListener validatingMongoEventListener(
+//            final LocalValidatorFactoryBean factory) {
+//        return new ValidatingMongoEventListener(factory);
+//    }
 
 }

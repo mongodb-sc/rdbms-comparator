@@ -16,6 +16,7 @@ import org.hibernate.stat.SessionStatistics;
 import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class CustomerService {
     MeterRegistry registry;
 
     @Autowired
-    MongoClient mongoClient;
+    MongoTemplate template;
 
     @Autowired
     EntityManager entityManager;

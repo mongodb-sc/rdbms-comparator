@@ -4,8 +4,6 @@ package com.mdb.rdbms.comparator.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.BatchSize;
 
 import org.springframework.data.mongodb.core.index.CompoundIndex;

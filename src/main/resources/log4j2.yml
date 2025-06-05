@@ -6,8 +6,6 @@ Configuration:
         pattern: "%d [%T %t %tp] %p %c - %m%n"
     NoSql:
       name: "MONGO"
-      JsonTemplateLayout:
-        eventTemplateUri: "classpath:customJsonLayout.json"
       MongoDb:
         connection: "${env:MONGODB_LOGGING_URI}"
         capped: true
