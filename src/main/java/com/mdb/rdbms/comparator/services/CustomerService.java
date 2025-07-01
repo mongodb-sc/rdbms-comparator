@@ -124,7 +124,7 @@ public class CustomerService {
             Statistics stats = session.getSessionFactory().getStatistics();
             stats.clear();
             Page<Customer> results = custJpaRepo.findAll(customerSpecification, paging);
-
+            logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));
             return new MetricsPage<>(results, stats.getPrepareStatementCount());
 
         }
