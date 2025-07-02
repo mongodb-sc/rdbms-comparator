@@ -2,17 +2,11 @@ Configuration:
   Properties:
     Property:
       - name: log4j.asyncLoggerRingBufferSize
-        value: 8192
+        value: 256
       - name: log4j2.asyncLoggerWaitStrategy
         value: Sleep
       - name: log4j2.asyncLoggerSynchronizeEnqueueWhenQueueFull
         value: true
-      - name: log4j2.asyncLoggerTimeout
-        value: 30
-      - name: log4j2.asyncLoggerExceptionHandler
-        value: default
-      - name: log4j2.asyncLoggerThreadNameStrategy
-        value: UNCACHED
   Appenders:
     Console:
       name: "CONSOLE"
@@ -32,7 +26,6 @@ Configuration:
     AsyncLogger:
       - name: "com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener"
         level: "INFO"
-        additivity: false
         AppenderRef:
           - ref: "MONGO"
       - name: "org.hibernate.SQL"
