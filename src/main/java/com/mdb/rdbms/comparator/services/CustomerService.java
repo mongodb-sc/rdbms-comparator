@@ -1,5 +1,6 @@
 package com.mdb.rdbms.comparator.services;
 
+import com.mdb.rdbms.comparator.configuration.SqlStatementInspector;
 import com.mdb.rdbms.comparator.models.*;
 import com.mdb.rdbms.comparator.repositories.jpa.*;
 import com.mdb.rdbms.comparator.repositories.mongo.CustomerMongoRepository;
@@ -47,6 +48,9 @@ public class CustomerService {
 
     @Autowired
     AddressJpaRepository addressJpaRepo;
+
+    @Autowired
+    SqlStatementInspector sqlStatementInspector;
 
 
     public Response<Customer> create(Customer customer) {
@@ -118,13 +122,14 @@ public class CustomerService {
             logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));
             return new MetricsPage<>(results, queriesCount);
         } else {
-
+            sqlStatementInspector.startOperation("GetCustomers");
             CustomerSpecification customerSpecification = new CustomerSpecification(customerSearch);
             Session session = entityManager.unwrap(Session.class);
             Statistics stats = session.getSessionFactory().getStatistics();
             stats.clear();
             Page<Customer> results = custJpaRepo.findAll(customerSpecification, paging);
             logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));
+            sqlStatementInspector.endOperation();
             return new MetricsPage<>(results, stats.getPrepareStatementCount());
 
         }

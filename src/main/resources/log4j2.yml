@@ -1,37 +1,15 @@
 Configuration:
-  Properties:
-    Property:
-      - name: log4j.asyncLoggerRingBufferSize
-        value: 256
-      - name: log4j2.asyncLoggerWaitStrategy
-        value: Sleep
-      - name: log4j2.asyncLoggerSynchronizeEnqueueWhenQueueFull
-        value: true
   Appenders:
     Console:
       name: "CONSOLE"
       PatternLayout:
         pattern: "%d [%T %t %tp] %p %c - %m%n"
-    NoSql:
-      name: "MONGO"
-      MongoDb:
-        connection: "${env:MONGODB_LOGGING_URI}"
-        capped: true
   Loggers:
     Root:
       level: "DEBUG"
       AppenderRef:
         - ref: "CONSOLE"
           level: "INFO"
-    AsyncLogger:
-      - name: "com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener"
-        level: "INFO"
-        AppenderRef:
-          - ref: "MONGO"
-      - name: "org.hibernate.SQL"
-        level: "DEBUG"
-        AppenderRef:
-          - ref: "MONGO"
     Logger:
       - name: "org.hibernate.engine.internal.StatisticalLoggingSessionEventListener"
         level: "WARN"

@@ -121,7 +121,7 @@
             <div class="col-6 text-wrap">
                 <ol>
                     @for(query of queries | async; track queries){
-                        @if (query.loggerName.includes('SQL')) {
+                        @if (query.source.includes('postgres')) {
                             <li class="queries-text-wrap">{{query.message}}</li>
                         }
                     }
@@ -130,7 +130,7 @@
             <div class="col-6 text-wrap">
                 <ol>
                     @for(query of queries | async; track queries){
-                        @if (query.loggerName.includes('MongoDB')) {
+                        @if (query.source.includes('mongodb')) {
                             <li class="queries-text-wrap">{{query.message}}</li>
                         }
                     }

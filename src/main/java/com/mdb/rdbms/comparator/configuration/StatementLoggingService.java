@@ -20,10 +20,11 @@ import java.util.concurrent.CompletableFuture;
 public class StatementLoggingService {
     private static final Logger logger = LoggerFactory.getLogger(StatementLoggingService.class);
 
+    @Lazy
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Async("sqlLogExecutor")
+    @Async
     public CompletableFuture<Void> logSqlExecution(List<String> sql, Thread thread, Long millis) {
         try {
             BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, "logs");
@@ -41,14 +42,13 @@ public class StatementLoggingService {
             }
 
             BulkWriteResult result = bulkOps.execute();
-            System.out.println("Inserted: " + result.getInsertedCount());
         } catch (Exception e) {
             logger.error("Failed to log SQL execution to MongoDB", e);
         }
         return CompletableFuture.completedFuture(null);
     }
 
-    @Async("mongoLogExecutor")
+    @Async
     public CompletableFuture<Void> logMongoExecution(BsonDocument statement, Thread thread, Long millis) {
         try {
             Document doc = new Document()
@@ -57,7 +57,7 @@ public class StatementLoggingService {
                     .append("millis", millis)
                     .append("message", statement)
                     .append("source", "mongodb");
-            this.mongoTemplate.insert(statement, "logs");
+            this.mongoTemplate.insert(doc, "logs");
         } catch (Exception e) {
             logger.error("Failed to log batch MQL executions to MongoDB", e);
         }
