@@ -60,7 +60,7 @@ public class OrdersService {
     MeterRegistry registry;
 
     @Autowired
-    SqlStatementInspector statementInspector
+    SqlStatementInspector statementInspector;
 
     public Response<Order> create(Order order) {
         // Lines to save Order in Mongo
