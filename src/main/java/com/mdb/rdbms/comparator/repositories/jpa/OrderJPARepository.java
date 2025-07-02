@@ -18,7 +18,7 @@ import java.util.List;
 public interface OrderJPARepository extends JpaRepository<Order, Integer>, JpaSpecificationExecutor<Order> {
 
 
-    @Query("Select o from Order o where o.customer.id = :customerId order by o.orderDate desc limit 5")
+    @Query("Select o from Order o where o.customer.id = :customerId order by o.orderDate desc, o.orderStatus asc limit 5")
     List<Order> findByCustomerId(@Param("customerId") Integer customerId);
 
 }

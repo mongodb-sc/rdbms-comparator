@@ -19,7 +19,7 @@ import java.util.List;
         @Index(name = "orderDate_orderStatus_customer_lastname", columnList = "orderDate, orderStatus DESC")
 })
 @Document("orders")
-@CompoundIndex(name="orderDate_orderStatus_customer.lastname", def="{'orderDate': 1, 'orderStatus': 1, 'customer.lastName':  1}")
+@CompoundIndex(name="orderDate_orderStatus_customer.lastname", def="{'orderDate': -1, 'orderStatus': 1, 'customer.lastName':  1}")
 public class Order {
 
 

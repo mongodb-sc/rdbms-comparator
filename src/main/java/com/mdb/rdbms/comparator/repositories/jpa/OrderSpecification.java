@@ -32,7 +32,6 @@ public class OrderSpecification implements Specification<Order> {
             predicates.add(cb.lessThanOrEqualTo(root.get("orderDate").as(Instant.class), instant.minus(Period.ofDays(-1)).truncatedTo(ChronoUnit.DAYS)));
         }
         if (orderSearch.getId() != null) {
-            System.out.println("Looklup by ID got called");
             predicates.add(cb.equal(root.get("id"), orderSearch.getId()));
         }
         if (!orderSearch.getPurchaseOrder().isEmpty()) {

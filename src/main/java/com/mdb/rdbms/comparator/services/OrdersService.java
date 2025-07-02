@@ -120,7 +120,12 @@ public class OrdersService {
     }
 
     public Page<Order> getAllOrders(String db, OrderSearch orderSearch, int page){
-        Pageable paging = PageRequest.of(page, 100, Sort.by("orderDate").descending());
+        Sort sortBy = Sort.by(List.of(
+                new org.springframework.data.domain.Sort.Order(Sort.Direction.DESC, "orderDate"),
+                new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "orderStatus"),
+                new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "customer.lastName")
+        ));
+        Pageable paging = PageRequest.of(page, 100, sortBy);
 
         if (db.equals("mongodb")) {
             return mongoSearch(orderSearch, paging);
@@ -155,9 +160,6 @@ public class OrdersService {
 
     private Page<Order> jpaSearch(OrderSearch orderSearch, Pageable paging){
         statementInspector.startOperation("FindOrders");
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Order> criteria = cb.createQuery(Order.class);
-        Root<Order> root = criteria.from(Order.class);
         OrderSpecification orderSpec = new OrderSpecification(orderSearch);
         Session session = entityManager.unwrap(Session.class);
         Statistics stats = session.getSessionFactory().getStatistics();
