@@ -58,7 +58,7 @@ public class CustomerService {
         long startTime = System.currentTimeMillis();
 
         mongoRepo.save(customer);
-
+        sqlStatementInspector.startOperation("Create Customer");
         metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         customer.set_id(null);
 
@@ -71,6 +71,7 @@ public class CustomerService {
         Customer cust =  custJpaRepo.save(customer);
 
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
+        sqlStatementInspector.endOperation();
         return new Response<>(cust, metrics);
     }
 

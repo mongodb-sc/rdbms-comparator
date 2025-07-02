@@ -3,6 +3,8 @@ package com.mdb.rdbms.comparator.services;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mdb.rdbms.comparator.configuration.SqlStatementInspector;
+import com.mdb.rdbms.comparator.configuration.StatementLoggingService;
 import com.mdb.rdbms.comparator.models.*;
 import com.mdb.rdbms.comparator.models.Order;
 import com.mdb.rdbms.comparator.repositories.jpa.*;
@@ -57,6 +59,8 @@ public class OrdersService {
     @Autowired
     MeterRegistry registry;
 
+    @Autowired
+    SqlStatementInspector statementInspector
 
     public Response<Order> create(Order order) {
         // Lines to save Order in Mongo
@@ -71,7 +75,7 @@ public class OrdersService {
         metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         // Lines to save Order in Postgres
 
-
+        statementInspector.startOperation("Create Order");
         Session session = entityManager.unwrap(Session.class);
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
@@ -88,6 +92,7 @@ public class OrdersService {
         Order pgOrder = jpaRepo.save(order);
 
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
+        statementInspector.endOperation();
         return new Response<>(pgOrder, metrics);
  
     }
@@ -101,6 +106,7 @@ public class OrdersService {
 
     public Response<List<Order>> getRecentOrders(String db, int customerId) {
         List<Metrics> metrics = new ArrayList<>();
+        statementInspector.startOperation("FindRecentOrders");
         Session session = entityManager.unwrap(Session.class);
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
@@ -109,6 +115,7 @@ public class OrdersService {
             order.setDetails(null);
         }
         metrics.add(new Metrics(Metrics.DB.POSTGRES, System.currentTimeMillis() - stats.getStart().toEpochMilli(), stats.getPrepareStatementCount()));
+        statementInspector.endOperation();
         return new Response<>(recentOrders, metrics);
     }
 
@@ -147,7 +154,7 @@ public class OrdersService {
 
 
     private Page<Order> jpaSearch(OrderSearch orderSearch, Pageable paging){
-
+        statementInspector.startOperation("FindOrders");
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Order> criteria = cb.createQuery(Order.class);
         Root<Order> root = criteria.from(Order.class);
@@ -156,6 +163,7 @@ public class OrdersService {
         Statistics stats = session.getSessionFactory().getStatistics();
         stats.clear();
         Page<Order> results = jpaRepo.findAll(orderSpec, paging);
+        statementInspector.endOperation();
         return new MetricsPage<>(results, stats.getPrepareStatementCount());
     }
 
