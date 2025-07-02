@@ -13,6 +13,6 @@ import java.util.List;
 public interface QueriesRepository extends MongoRepository<com.mdb.rdbms.comparator.models.Query, String> {
 
 
-    @Query(value="{'threadName':  ?0, 'millis':  {'$gte':  ?2}}", fields = "{'_id': 0, 'message': 1, 'millis':  1, 'loggerName': 1}", sort = "{'millis': 1}")
+    @Query(value="{'threadName':  ?0, 'millis':  {'$gte':  ?2}}", fields = "{'_id': 0, 'message': 1, 'millis':  1, 'source': 1}", sort = "{'millis': 1}")
     List<com.mdb.rdbms.comparator.models.Query> findQueries(String threadName, long threadId, long endTime);
 }
