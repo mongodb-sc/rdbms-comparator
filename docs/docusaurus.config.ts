@@ -10,14 +10,14 @@ const config: Config = {
   favicon: 'img/favicon-mongo.ico',
 
   // Set the production url of your site here
-  url: 'https://jesmith17.github.io/',
+  url: 'https://mongodb-sc.github.io/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/rdbms_comparator',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'jesmith17', // Usually your GitHub org/user name.
+  organizationName: 'mongodb-sc', // Usually your GitHub org/user name.
   projectName: 'rdbms_comparator', // Usually your repo name.
 
   onBrokenLinks: 'throw',
