@@ -13,12 +13,12 @@ const config: Config = {
   url: 'https://mongodb-sc.github.io/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/rdbms_comparator',
+  baseUrl: '/rdbms-comparator',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'mongodb-sc', // Usually your GitHub org/user name.
-  projectName: 'rdbms_comparator', // Usually your repo name.
+  projectName: 'rdbms-comparator', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
