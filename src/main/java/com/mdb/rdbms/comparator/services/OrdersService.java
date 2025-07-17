@@ -170,6 +170,10 @@ public class OrdersService {
     }
 
     private HashMap<String, Object> mongoQuery(HashMap<String, Object> params, OrderSearch orderSearch){
+        if (orderSearch == null){
+            return params;
+        }
+
         try {
             for (Field field : orderSearch.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
