@@ -38,19 +38,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.4.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.3.4'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.7.0'
-    implementation "me.paulschwarz:spring-dotenv:4.0.0"
-    implementation 'org.apache.logging.log4j:log4j-mongodb:2.24.3'
-    implementation 'org.jboss.logging:jboss-logging:3.6.1.Final'
-    implementation "org.springframework.boot:spring-boot-starter-log4j2:3.4.0"
     implementation 'com.lmax:disruptor:3.4.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    modules {
-        module("org.springframework.boot:spring-boot-starter-logging") {
-            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
-        }
-    }
 }
 
 tasks.named('test') {

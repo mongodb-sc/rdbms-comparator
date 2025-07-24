@@ -117,7 +117,7 @@ public class CustomerService {
             } else {
                 HashMap<String, Object> params = this.mongoCustomerQuery(customerSearch);
                 double startCount = registry.counter("queries.issued").count();
-                results = mongoRepo.sortCustomers(params, paging);
+                results = mongoRepo.findCustomers(params, paging);
                 queriesCount = registry.counter("queries.issued").count() - startCount;
             }
             logger.info("Elapsed query time is " +  (System.currentTimeMillis() - startTime));

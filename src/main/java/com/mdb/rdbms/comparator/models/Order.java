@@ -1,13 +1,12 @@
 package com.mdb.rdbms.comparator.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.math.BigDecimal;
@@ -19,9 +18,8 @@ import java.util.List;
         @Index(name = "orderDate_orderStatus_customer_lastname", columnList = "orderDate, orderStatus DESC")
 })
 @Document("orders")
-@CompoundIndex(name="orderDate_orderStatus_customer.lastname", def="{'orderDate': -1, 'orderStatus': 1, 'customer.lastName':  1}")
+@BatchSize(size=500)
 public class Order {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,6 +36,7 @@ public class Order {
     String invoiceId;
     Date invoiceDate;
     String deliveryMethod;
+    @Field(targetType = FieldType.DECIMAL128)
     BigDecimal weight;
     Integer totalPieces;
     Date pickDate;
@@ -49,6 +48,8 @@ public class Order {
     Integer orderType;
     Integer employeeId;
     String location = "US";
+    @Field(targetType = FieldType.DECIMAL128)
+    BigDecimal total;
 
     @Transient
     Integer customer_id;
@@ -56,10 +57,7 @@ public class Order {
     @Transient
     Integer store_id;
 
-    @Transient
-    Integer shippingAddressId;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="address_id", referencedColumnName = "id")
     Address shippingAddress;
 
@@ -69,11 +67,11 @@ public class Order {
     Customer customer;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="store_id", referencedColumnName = "id")
     Store store;
 
-    BigDecimal total;
+
 
     @JsonIgnoreProperties({"order"})
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -279,14 +277,6 @@ public class Order {
 
     public void setStore_id(Integer store_id) {
         this.store_id = store_id;
-    }
-
-    public Integer getShippingAddressId() {
-        return shippingAddressId;
-    }
-
-    public void setShippingAddressId(Integer shippingAddressId) {
-        this.shippingAddressId = shippingAddressId;
     }
 
     public String get_id() {

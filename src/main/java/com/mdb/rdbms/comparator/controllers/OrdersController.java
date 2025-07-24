@@ -1,11 +1,13 @@
 package com.mdb.rdbms.comparator.controllers;
 
+import com.mdb.rdbms.comparator.models.MetricsPage;
 import com.mdb.rdbms.comparator.models.Order;
 import com.mdb.rdbms.comparator.models.OrderSearch;
 import com.mdb.rdbms.comparator.models.Response;
 import com.mdb.rdbms.comparator.services.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +38,7 @@ public class OrdersController {
 
     @GetMapping
     public Page<Order> getAllOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestParam(name="page", required = false, defaultValue = "0") int page){
-        return this.service.getAllOrders(db, null, page);
+        return this.service.getOrders(db, null, page);
     }
 
     @GetMapping("recent")
@@ -47,7 +49,7 @@ public class OrdersController {
 
     @PostMapping("search")
     public Page<Order> getOrders(@RequestParam(name = "db", required = false, defaultValue="pg") String db, @RequestBody OrderSearch orderSearch, @RequestParam(name="page", required = false, defaultValue = "0") int page){
-        return this.service.getAllOrders(db, orderSearch, page);
+        return this.service.getOrders(db, orderSearch, page);
     }
 
 }

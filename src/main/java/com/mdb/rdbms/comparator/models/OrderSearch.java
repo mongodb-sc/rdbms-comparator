@@ -29,6 +29,7 @@ public class OrderSearch {
     Store store;
     BigDecimal total;
     boolean lucene;
+    String location = "US";
 
 
     public Integer getId() {
@@ -214,6 +215,11 @@ public class OrderSearch {
     public void setLucene(boolean lucene) {
         this.lucene = lucene;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
 
     @Override
     public String toString() {

@@ -4,6 +4,7 @@ import com.mdb.rdbms.comparator.configuration.MongoDBCommandCountListener;
 import com.mdb.rdbms.comparator.configuration.SqlStatementInspector;
 import com.mdb.rdbms.comparator.configuration.StatementLoggingService;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.bson.types.Decimal128;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,12 +12,17 @@ import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCu
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.repository.query.QueryLookupStrategy;
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.concurrent.Executor;
 
 

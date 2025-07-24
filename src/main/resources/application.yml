@@ -26,6 +26,7 @@ spring:
   jackson:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
+    default-property-inclusion: non_empty
 management:
   observability:
     enabled: true
@@ -54,6 +55,19 @@ springdoc:
 #    path: /swagger-ui.html
 #    enabled: true
   show-actuator: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        engine:
+          internal:
+            StatisticalLoggingSessionEventListener: WARN
+      mongodb:
+        driver:
+          cluster: WARN
+      springframework: WARN
 
 
 

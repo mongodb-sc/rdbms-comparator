@@ -16,11 +16,6 @@ public class SqlStatementInspector implements StatementInspector {
     @Autowired
     StatementLoggingService statementLoggingService;
 
-//    @Override
-//    public String inspect(String sql) {
-//        this.statementLoggingService.logSqlExecution(sql, Thread.currentThread(), System.currentTimeMillis());
-//        return sql;
-//    }
 
     private final ThreadLocal<List<String>> sqlStatements = ThreadLocal.withInitial(ArrayList::new);
     private final ThreadLocal<String> operationContext = new ThreadLocal<>();

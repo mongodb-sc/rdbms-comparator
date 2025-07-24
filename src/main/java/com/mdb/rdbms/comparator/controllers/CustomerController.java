@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +41,8 @@ public class CustomerController {
 
     @PostMapping("search")
     public Page<Customer> getCustomers(@RequestParam(name = "db", required = false, defaultValue="pg") String db,
-                                       @RequestBody CustomerSearch customerSearch,
-                                       @RequestParam(name="page", required = false, defaultValue = "0") int page){
+                                             @RequestBody CustomerSearch customerSearch,
+                                             @RequestParam(name="page", required = false, defaultValue = "0") int page){
 
 
         return this.service.getCustomers(db, customerSearch, page);

@@ -17,7 +17,7 @@ public interface CustomerMongoRepository extends MongoRepository<Customer, Integ
 
 
     @Query(value="?0")
-    Page<Customer> sortCustomers(HashMap<String, Object> params, Pageable paging);
+    Page<Customer> findCustomers(HashMap<String, Object> params, Pageable paging);
 
     @Query(value="{'pg_id':  ?0}")
     Customer findCustomerByPgId(Integer id);

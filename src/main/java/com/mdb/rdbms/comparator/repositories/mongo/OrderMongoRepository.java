@@ -8,6 +8,7 @@ import com.mdb.rdbms.comparator.models.Order;
 import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -22,9 +23,14 @@ public interface OrderMongoRepository extends MongoRepository<Order, Integer> {
     @Query(value="{'details.product_id': ?0}")
     List<Order> findOrdersByProductId(Integer product_id);
 
-    @Query(value="?0", sort = "{'orderDate': -1, 'orderStatus': 1, 'customer.lastName':  1}", fields = "{'customer.address': 0, 'customer.phones': 0, 'customers.emails': 0}")
-    Page<Order> searchOrders(HashMap<String, Object> params, Pageable paging);
+//    @Query(value="?0", sort = "{'orderDate': -1, 'orderStatus': 1, 'customer.lastName':  1}", fields = "{'customer.address': 0, 'customer.phones': 0, 'customer.emails': 0, 'customer.recentOrders': 0}")
+//    Page<Order> searchOrders(HashMap<String, Object> params, Pageable paging);
 
+
+//    @Aggregation(pipeline = {"{'$match': ?0}","{$sort: {'orderDate': -1, 'orderStatus': 1, 'customer.lastName':  1}}","{'$skip': ?1}", "{'$limit': ?2}"})
+//    @Aggregation(pipeline={"{'$match': ?0}"})
+    @Query(value="?0")
+    Page<Order> searchOrders(HashMap<String, Object> params, Pageable paging);
 
 
     @Aggregation(pipeline = {"{'$search':{'index':'default',count: {type: 'total'},'compound': {'filter': ?0 }}}","{'$skip': ?1}", "{'$limit': ?2}"})

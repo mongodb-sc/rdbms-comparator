@@ -37,10 +37,11 @@
     </div>
       <div class="row" *ngIf="useMongo | async">
           <div class="col-12 align-items-start">
-              <div class="form-check form-select-lg form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="searchForm" (change)="toggleSearch()">
-                  <label class="form-check-label" for="searchForm" *ngIf="showSimpleSearch">Simple Search</label>
-                  <label class="form-check-label" for="searchForm" *ngIf="showComplexSearch">Complex Search</label>
+              <div class="form-check form-select-lg form-switch d-flex align-content-center justify-content-start">
+                  <label class="form-check-label" for="searchForm">Complex Search</label>
+                  <input class="form-check-input me-2 ms-2" type="checkbox" role="switch" id="searchForm" (change)="toggleSearch()">
+                  <label class="form-check-label" for="searchForm">Simple Search</label>
+
               </div>
           </div>
       </div>

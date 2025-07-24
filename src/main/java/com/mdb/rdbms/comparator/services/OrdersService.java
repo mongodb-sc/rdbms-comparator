@@ -14,12 +14,15 @@ import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.BsonArray;
 import org.bson.Document;
 import org.hibernate.Session;
 import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -31,6 +34,8 @@ import java.util.function.Function;
 
 @Service
 public class OrdersService {
+
+    private static final Logger logger = LogManager.getLogger(OrdersService.class);
 
     @Autowired
     OrderMongoRepository mongoRepo;
@@ -119,29 +124,37 @@ public class OrdersService {
         return new Response<>(recentOrders, metrics);
     }
 
-    public Page<Order> getAllOrders(String db, OrderSearch orderSearch, int page){
+    public Page<Order> getOrders(String db, OrderSearch orderSearch, int page){
         Sort sortBy = Sort.by(List.of(
                 new org.springframework.data.domain.Sort.Order(Sort.Direction.DESC, "orderDate"),
                 new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "orderStatus"),
                 new org.springframework.data.domain.Sort.Order(Sort.Direction.ASC, "customer.lastName")
         ));
         Pageable paging = PageRequest.of(page, 100, sortBy);
-
+        long startTime = System.currentTimeMillis();
         if (db.equals("mongodb")) {
-            return mongoSearch(orderSearch, paging);
+           Page<Order> results = mongoSearch(orderSearch, paging);
+           logger.info(String.format("Elapsed query time is %,d ms for DB %s", System.currentTimeMillis() - startTime, db));
+           return results;
         } else {
-            return this.jpaSearch( orderSearch, paging);
+           Page<Order> results = this.jpaSearch( orderSearch, paging);
+           logger.info(String.format("Elapsed query time is %,d ms for DB %s", System.currentTimeMillis() - startTime, db));
+           return results;
         }
     }
 
 
     private Page<Order> mongoSearch(OrderSearch orderSearch, Pageable paging){
+
         HashMap<String, Object> params = new HashMap<>();
         Page<Order> result = null;
         double startCount = registry.counter("queries.issued").count();
         if (!orderSearch.isLucene()) {
            params = this.mongoQuery(params, orderSearch);
-           result = mongoRepo.searchOrders(params ,paging);
+           long queryStart = System.currentTimeMillis();
+           result = mongoRepo.searchOrders(params, paging);
+           logger.info("Elapsed time for query is " +   (System.currentTimeMillis() - queryStart) + "ms");
+
         } else {
             JsonArray jsonArray = this.mongoLucene(orderSearch);
             List<Document> query = new ArrayList<>();
@@ -213,6 +226,7 @@ public class OrdersService {
     private JsonArray mongoLucene( OrderSearch orderSearch){
         orderSearch.getCustomer().setPhones(null);
         orderSearch.getCustomer().setEmails(null);
+        orderSearch.getCustomer().setLocation(null);
         JsonArray json = new JsonArray();
         HashMap<String, Object> queryStringParams = new HashMap<>();
         try {

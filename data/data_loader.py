@@ -8,8 +8,10 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 
-pgConn = psycopg2.connect("postgres://yoda:starwars@localhost:5433/rdbms")
-client = MongoClient('mongodb://yoda:starwars@localhost:27018/?directConnection=true')
+#pgConn = psycopg2.connect("postgres://yoda:starwars@localhost:5432/rdbms")
+pgConn = psycopg2.connect("postgres://yoda:starwars@rdbms-comparator.cymtbjk7fwn8.us-east-1.rds.amazonaws.com/rdbms")
+#client = MongoClient('mongodb://localhost:27017/?directConnection=true')
+client = MongoClient('mongodb+srv://yoda:starwars17@demo.akkzw.mongodb.net/?retryWrites=true&w=majority&appName=demo')
 mdb = client['rdbms']
 
 
@@ -34,6 +36,7 @@ def create_customers():
         "firstName": _("person.first_name"),
         "lastName": _("person.last_name"),
         "title": _("person.title"),
+        "location":"US",
         "address": {
             "city": _("address.city"),
             "country": _("address.country_code"),
@@ -53,7 +56,7 @@ def create_customers():
 
 
     count = 0
-    for x in range(0,100):
+    for x in range(0,1000):
         with pgConn.cursor() as cursor:
             addressParams = []
             customerParams = []
@@ -223,9 +226,9 @@ def create_orders():
 
 
 try:
-    create_customers()
-    create_products()
-    create_stores()
+    # create_customers()
+    # create_products()
+    # create_stores()
     create_orders()
 except Exception as e:
     print(f'Error occured: {e}')

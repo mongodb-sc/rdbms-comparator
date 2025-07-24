@@ -2,16 +2,12 @@ package com.mdb.rdbms.comparator.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.BatchSize;
 
-import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.math.BigInteger;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -222,10 +222,11 @@
               <button type="button" class="btn btn-outline-primary mx-3" (click)="resetForm()">Reset</button>
             </div>
             <div class="col" *ngIf="useMongo | async">
-              <div class="form-check form-select-lg form-switch px-3">
-                <input class="form-check-input" type="checkbox" role="switch" id="useLuceneSwitch" formControlName="lucene">
-                <label class="form-check-label" for="useLuceneSwitch" *ngIf="searchForm.controls['lucene'].value">Use Lucene</label>
-                <label class="form-check-label" for="useLuceneSwitch" *ngIf="!searchForm.controls['lucene'].value">Use Traditional</label>
+              <div class="form-check form-select-lg form-switch px-3 d-flex align-content-center justify-content-end">
+                  <label class="form-check-label" for="useLuceneSwitch">Use Traditional</label>
+                  <input class="form-check-input me-2 ms-2" type="checkbox" role="switch" id="useLuceneSwitch" formControlName="lucene">
+                  <label class="form-check-label" for="useLuceneSwitch">Use Lucene</label>
+
               </div>
             </div>
           </div>
