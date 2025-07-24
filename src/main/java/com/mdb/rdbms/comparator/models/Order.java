@@ -51,7 +51,7 @@ public class Order {
     @Field(targetType = FieldType.DECIMAL128)
     BigDecimal total;
     @Transient
-    Customer.Meta meta;
+    Meta meta;
 
     @Transient
     Integer customer_id;
@@ -297,11 +297,11 @@ public class Order {
         this.location = location;
     }
 
-    public Customer.Meta getMeta() {
+    public Meta getMeta() {
         return meta;
     }
 
-    public void setMeta(Customer.Meta meta) {
+    public void setMeta(Meta meta) {
         this.meta = meta;
     }
 }
