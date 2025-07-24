@@ -1,5 +1,11 @@
 # RDBMS Comparator
 
+## Maintainers
+| Name | Slack | Email |
+|------- | -------- | ---------|
+| Josh Smith | @JoshSmith | Josh.Smith@mongodb.com |
+
+
 RDBMS Comparator is a simple app based on the concept of a logistics company that has customers and orders. 
 The app uses a Spring-Boot backend to connect to both a MongoDB and Postgres DB. 
 Using an Angular CLI created web app (hosted inside the spring-boot app) the user can show the approach to query different 
