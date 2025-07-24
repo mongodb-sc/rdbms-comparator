@@ -33,7 +33,7 @@ public interface OrderMongoRepository extends MongoRepository<Order, Integer> {
     Page<Order> searchOrders(HashMap<String, Object> params, Pageable paging);
 
 
-    @Aggregation(pipeline = {"{'$search':{'index':'default',count: {type: 'total'},'compound': {'filter': ?0 }}}","{'$skip': ?1}", "{'$limit': ?2}"})
+    @Aggregation(pipeline = {"{'$search':{'index':'default',count: {type: 'total'},'compound': {'filter': ?0 }}}","{'$addFields': {'meta': '$$SEARCH_META'}}","{'$skip': ?1}", "{'$limit': ?2}"})
     List<Order> searchOrdersLucene(List<Document> params, int skip, int limit);
 
 

@@ -50,6 +50,8 @@ public class Order {
     String location = "US";
     @Field(targetType = FieldType.DECIMAL128)
     BigDecimal total;
+    @Transient
+    Customer.Meta meta;
 
     @Transient
     Integer customer_id;
@@ -293,5 +295,13 @@ public class Order {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Customer.Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Customer.Meta meta) {
+        this.meta = meta;
     }
 }

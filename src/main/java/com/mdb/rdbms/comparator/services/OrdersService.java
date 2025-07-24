@@ -161,9 +161,8 @@ public class OrdersService {
             for (JsonElement jsonElement : jsonArray) {
                 query.add(Document.parse(jsonElement.toString()));
             }
-            System.out.println(query.toString());
             List<Order> searchResults = mongoRepo.searchOrdersLucene(query, paging.getPageNumber(), paging.getPageSize());
-            long totalRecords = mongoRepo.count();
+            long totalRecords = searchResults.get(0).getMeta().getCount();
             result = new PageImpl<>(searchResults, paging, totalRecords);
         }
         double queriesCount = registry.counter("queries.issued").count() - startCount;
