@@ -57,7 +57,7 @@ public class CustomerService {
         List<Metrics> metrics = new ArrayList<>();
         long startTime = System.currentTimeMillis();
 
-        mongoRepo.save(customer);
+        mongoRepo.insert(customer);
         sqlStatementInspector.startOperation("Create Customer");
         metrics.add(new Metrics(Metrics.DB.MONGO, System.currentTimeMillis() - startTime, 1L));
         customer.set_id(null);
