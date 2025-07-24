@@ -6,12 +6,13 @@ import json
 from pymongo import MongoClient
 import psycopg2
 from psycopg2.extras import execute_values
+from dotenv import load_config
+import os
 
+load_config()
 
-#pgConn = psycopg2.connect("postgres://yoda:starwars@localhost:5432/rdbms")
-pgConn = psycopg2.connect("postgres://yoda:starwars@rdbms-comparator.cymtbjk7fwn8.us-east-1.rds.amazonaws.com/rdbms")
-#client = MongoClient('mongodb://localhost:27017/?directConnection=true')
-client = MongoClient('mongodb+srv://yoda:starwars17@demo.akkzw.mongodb.net/?retryWrites=true&w=majority&appName=demo')
+pgConn = psycopg2.connect(os.getenv("POSTGRES_URI"))
+client = MongoClient(os.getenv("MONGODB_URI"))
 mdb = client['rdbms']
 
 

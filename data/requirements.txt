@@ -2,3 +2,4 @@ requests
 mimesis>=17.1.0
 pymongo
 psycopg2
+dotenv
