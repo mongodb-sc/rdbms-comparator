@@ -6,10 +6,10 @@ import json
 from pymongo import MongoClient
 import psycopg2
 from psycopg2.extras import execute_values
-from dotenv import load_config
+from dotenv import load_dotenv
 import os
 
-load_config()
+load_dotenv()
 
 pgConn = psycopg2.connect(os.getenv("POSTGRES_URI"))
 client = MongoClient(os.getenv("MONGODB_URI"))
@@ -227,9 +227,9 @@ def create_orders():
 
 
 try:
-    # create_customers()
-    # create_products()
-    # create_stores()
+    create_customers()
+    create_products()
+    create_stores()
     create_orders()
 except Exception as e:
     print(f'Error occured: {e}')
